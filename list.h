@@ -16,7 +16,7 @@ typedef struct listIter {
 	int direction;
 } listIter;
 
-typedef struct listList {
+typedef struct list {
 	listNode *head;
 	listNode *tail;
 	size_t len;
