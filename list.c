@@ -3,7 +3,8 @@
 
 #include "list.h"
 
-list* listCreate() {
+list*
+listCreate() {
 	list* list;
 	if ((list = malloc(sizeof(*list))) == NULL) {
 		return NULL;
@@ -16,7 +17,8 @@ list* listCreate() {
 	return list;
 }
 
-void listRelease(list* list) {
+void
+listRelease(list* list) {
 	size_t len;
 	listNode* current;
 	listNode* next;
@@ -32,7 +34,8 @@ void listRelease(list* list) {
 	free(list);
 }
 
-list* listAddNodeHead(list* list, void* value) {
+list*
+listAddNodeHead(list* list, void* value) {
 	listNode* node;
 	if((node = malloc(sizeof(*node))) == NULL)
 		return NULL;
@@ -50,7 +53,8 @@ list* listAddNodeHead(list* list, void* value) {
 	return list;
 }
 
-list* listAddNodeTail(list* list, void* value) {
+list*
+listAddNodeTail(list* list, void* value) {
 	listNode* node;
 	if((node = malloc(sizeof(*node))) == NULL)
 		return NULL;
@@ -68,7 +72,8 @@ list* listAddNodeTail(list* list, void* value) {
 	return list;
 }
 
-listIter* listGetIterator(list* list, int direction) {
+listIter*
+listGetIterator(list* list, int direction) {
 	listIter* iter;
 	if ((iter = malloc(sizeof(*iter))) == NULL) return NULL;
 	if (direction == LIST_START_HEAD) iter->next = list->head;
@@ -78,7 +83,8 @@ listIter* listGetIterator(list* list, int direction) {
 }
 
 
-listNode* listNext(listIter* iter) {
+listNode*
+listNext(listIter* iter) {
 	listNode* current = iter->next;
 
 	if (current != NULL) {
@@ -90,6 +96,7 @@ listNode* listNext(listIter* iter) {
 	return current;
 }
 
-void listReleaseIterator(listIter* iter) {
+void
+listReleaseIterator(listIter* iter) {
 	free(iter);
 }
