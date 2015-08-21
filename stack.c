@@ -17,10 +17,22 @@ void
 stackRelease(stack* stack) {}
 
 void*
-stackPop(stack* stack) {}
+stackPop(stack* stack) {
+	void* value;
+	stackNode* current;
+	if ((current = stack->top) == NULL)
+		return NULL;
+	stack->top = current->next;
+	current->next = NULL;
+	value = current->value;
+	free(current);
+	return value;
+}
 
 void*
-stackPeek(stack* stack) {}
+stackPeek(stack* stack) {
+	return stack->top->value;
+}
 
 void*
 stackPush(stack* stack, void* value) {}
