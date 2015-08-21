@@ -2,7 +2,7 @@
 #define __STACK_H__
 
 typedef struct stackNode {
-	struct listNode* next;
+	struct stackNode* next;
 	void* value;
 } stackNode;
 
