@@ -6,9 +6,8 @@
 list*
 listCreate() {
 	list* list;
-	if ((list = malloc(sizeof(*list))) == NULL) {
+	if ((list = malloc(sizeof(*list))) == NULL) 
 		return NULL;
-	};
 	list->head = list->tail = NULL;
 	list->len = 0;
 	list->dup = NULL;
