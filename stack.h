@@ -7,15 +7,15 @@ typedef struct stackNode {
 } stackNode;
 
 typedef struct stack {
-	listNode *top;
+	stackNode *top;
 	void (*free) (void* ptr);
 } stack;
 
 stack* stackCreate();
 void stackRelease(stack* stack);
 
-void* pop(stack* stack);
-void* peek(stack* stack);
-void* push(stack* stack, void* value);
+void* stackPop(stack* stack);
+void* stackPeek(stack* stack);
+void* stackPush(stack* stack, void* value);
 
 #endif /* __STACK_H */
