@@ -13,5 +13,14 @@ stackCreate() {
 	return stack;
 }
 
-void stackRelease(stack* stack) {
-}
+void
+stackRelease(stack* stack) {}
+
+void*
+stackPop(stack* stack) {}
+
+void*
+stackPeek(stack* stack) {}
+
+void*
+stackPush(stack* stack, void* value) {}
