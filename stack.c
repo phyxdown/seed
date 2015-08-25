@@ -31,8 +31,9 @@ stackPop(stack* stack) {
 
 void*
 stackPeek(stack* stack) {
-	if (stack->top == NULL) return NULL;
-	return stack->top->value;
+	stackNode* current;
+	if ((current = stack->top) == NULL) return NULL;
+	return current->value;
 }
 
 void*
