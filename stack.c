@@ -35,4 +35,11 @@ stackPeek(stack* stack) {
 }
 
 void*
-stackPush(stack* stack, void* value) {}
+stackPush(stack* stack, void* value) {
+	stackNode* node;
+	if ((node = malloc(sizeof(*node))) == NULL) return NULL;
+	node->value = value;
+	node->next = stack->top;
+	stack->top = node;
+	return value;
+}
