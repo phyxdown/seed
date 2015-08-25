@@ -31,6 +31,7 @@ stackPop(stack* stack) {
 
 void*
 stackPeek(stack* stack) {
+	if (stack->top == NULL) return NULL;
 	return stack->top->value;
 }
 
