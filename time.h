@@ -52,5 +52,7 @@ const char* months[] = {
 	"December"
 };
 
+#define MonthToString(M) \
+	months[(M)-1]
 
 #endif/* __TIME_H__ */
