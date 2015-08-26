@@ -1,3 +1,4 @@
+/* __LIST_H__ */
 #ifndef __LIST_H__
 #define __LIST_H__
 
@@ -39,7 +40,7 @@ void listReleaseIterator(listIter* iter);
 
 #endif /* __LIST_H__ */
 
-
+/* __STACK_H */
 #ifndef __STACK_H__
 #define __STACK_H__
 
