@@ -24,7 +24,7 @@ int Equal(timestamp *t, timestamp *u) {
 
 typedef int Month;
 
-const Month January   = 1,
+const Month January = 1,
       February  = 2,
       March     = 3,
       April     = 4,
@@ -54,5 +54,28 @@ const char* months[] = {
 
 #define MonthToString(M) \
 	months[(M)-1]
+
+typedef int Weekday;
+
+const Weekday Sunday = 0,
+      Monday    = 1,
+      Tuesday   = 2,
+      Wednesday = 3,
+      Thursday  = 4,
+      Friday    = 5,
+      Saturday  = 6;
+
+const char* days[] = {
+	"Sunday",
+	"Monday",
+	"Tuesday",
+	"Wednesday",
+	"Thursday",
+	"Friday",
+	"Saturday"
+};
+
+#define WeekdayToString(D) \
+	days[(D)]
 
 #endif/* __TIME_H__ */

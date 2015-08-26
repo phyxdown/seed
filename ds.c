@@ -1,7 +1,4 @@
-/* __LIST__ */
-#ifndef __LIST__
-#define __LIST__
-
+/* list.c */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -104,12 +101,8 @@ listReleaseIterator(listIter* iter) {
 	free(iter);
 }
 
-#endif /* __LIST__ */
 
-
-/* __STACK__ */
-#ifndef __STACK__
-#define __STACK__
+/* stack.c */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -157,4 +150,3 @@ stackPush(stack* stack, void* value) {
 	stack->top = node;
 	return value;
 }
-#endif /* __STACK__ */
