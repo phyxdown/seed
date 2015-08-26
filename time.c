@@ -1,9 +1,15 @@
 /* time.c */
 
-#include "time.h"
 #include <stdio.h>
 
-int main() {
-	printf("123");
-	return 0;
+#include "time.h"
+
+const char*
+MonthToString(Month m) {
+	return months[m-1];
+}
+
+const char*
+WeekdayToString(Weekday w) {
+	return days[w];
 }

@@ -52,8 +52,7 @@ const char* months[] = {
 	"December"
 };
 
-#define MonthToString(M) \
-	months[(M)-1]
+const char* MonthToString(Month m);
 
 typedef int Weekday;
 
@@ -75,7 +74,6 @@ const char* days[] = {
 	"Saturday"
 };
 
-#define WeekdayToString(D) \
-	days[(D)]
+const char* WeekdayToString(Weekday w);
 
 #endif/* __TIME_H__ */
