@@ -74,6 +74,26 @@ const char* days[] = {
 	"Saturday"
 };
 
+const int secondsPerMinute = 60,
+      secondsPerHour = 3600,
+      secondsPerDay = 86400,
+      secondsPerWeek = 604800,
+      daysPer400Years = 365*400 + 97,
+      daysPer100Years = 365*100 + 24,
+      daysPer4Years = 365*4 + 1;
+
+
 const char* WeekdayToString(Weekday w);
+
+
+const int64_t absoluteZeroYear = -292277022399;
+const int internalYear = 1;
+const unixYear = 1970;
+
+//offsets to convert between internal and absolute or unix times
+const int64_t absoluteToInternal = -9223371966579724288,
+      internalToAbsolute = 9223371966579724288,
+      unixToInternal = 62135596800,
+      internalToUnix = -62135596800;
 
 #endif/* __TIME_H__ */
