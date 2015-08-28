@@ -16,12 +16,19 @@ Now() {
 	t->sec = tv.tv_sec;
 	t->nsec = tv.tv_usec * 1000;
 	t->offset = tz.tz_minuteswest;
+	printf("timestamp %ld\n", tv.tv_sec*1000+tv.tv_usec/1000);
 	return t;
 }
 
 int After(timestamp *t, timestamp *u) { return t->sec > u->sec || t->sec == u->sec && t->nsec > u->nsec; }
 int Before(timestamp *t, timestamp *u) { return t->sec < u->sec || t->sec == u->sec && t->nsec < u->nsec; }
 int Equal(timestamp *t, timestamp *u) { return t->sec == u->sec && t->nsec == u->nsec; }
+
+typedef struct {
+	int32_t year;
+	int32_t month;
+	int32_t day;
+} ymd;
 
 const int secondsPerMinute = 60,
       secondsPerHour = 3600,
@@ -35,9 +42,9 @@ const int64_t absoluteZeroYear = -292277022399;
 const int internalYear = 1;
 const unixYear = 1970;
 
-//offsets to convert between internal and absolute or unix times
-const int64_t absoluteToInternal = -9223371966579724288,
-      internalToAbsolute = 9223371966579724288,
+const int64_t absoluteToInternal = -9223371966579724000,
+      internalToAbsolute = 9223371966579724000,
+                           
       unixToInternal = 62135596800,
       internalToUnix = -62135596800;
 
@@ -57,7 +64,9 @@ static int32_t daysBefore[] = {
 	31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31
 };
 
-static int64_t absSeconds(timestamp* t) { return t->sec + unixToInternal + internalToAbsolute; }
+//static int64_t absSeconds(timestamp* t) { return t->sec + unixToInternal + internalToAbsolute - t->offset*60; }
+//static int64_t absSeconds(timestamp* t) { return unixToInternal; }
+static int64_t absSeconds(timestamp* t) { return internalToAbsolute; }
 
 static int isLeap(int32_t year) { return year%4 == 0 && (year%100 !=0 || year&400 == 0); }
 
@@ -122,8 +131,12 @@ static ymd* absDate(timestamp* t, int full) {
 	return ymd;
 }
 
+int32_t Hour(timestamp* t) { return (absSeconds(t)%secondsPerDay)/secondsPerHour; }
+int32_t Minute(timestamp* t) { return (absSeconds(t)%secondsPerHour)/secondsPerMinute; }
+int32_t Second(timestamp* t) { return absSeconds(t)%secondsPerMinute; }
+
 int main() {
 	timestamp* t = Now();
 	ymd* ymd = absDate(t, 1);
-	printf("%ld\n%ld\n%ld\n", ymd->year, ymd->month, ymd->day);
+	printf("%ld\n%ld\n%ld\n%ld\n%ld\n%ld\n", ymd->year, ymd->month, ymd->day, Hour(t), Minute(t), Second(t));
 }

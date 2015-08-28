@@ -7,7 +7,7 @@
 typedef struct {
 	int64_t sec;    /* sec gives the number of seconds eclapsed since 1-1-1 00:00:00 */
 	int32_t nsec;   /* nanoseconds [0, 999999999] */
-	int16_t offset; /* offset from UTC in minutes [-1439, 1439] */
+	int16_t offset;
 } timestamp;
 
 timestamp* Now();
@@ -16,11 +16,8 @@ int After(timestamp *t, timestamp *u);
 int Before(timestamp *t, timestamp *u);
 int Equal(timestamp *t, timestamp *u);
 
-typedef struct {
-	int32_t year;
-	int32_t month;
-	int32_t day;
-} ymd;
+int32_t Hour(timestamp *t);
+int32_t Minute(timestamp *t);
 
 typedef int Month;
 const Month January = 1,
