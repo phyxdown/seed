@@ -16,7 +16,6 @@ Now() {
 	t->sec = tv.tv_sec;
 	t->nsec = tv.tv_usec * 1000;
 	t->offset = tz.tz_minuteswest;
-	printf("timestamp %ld\n", tv.tv_sec*1000+tv.tv_usec/1000);
 	return t;
 }
 
@@ -38,12 +37,12 @@ const int secondsPerMinute = 60,
       daysPer100Years = 365*100 + 24,
       daysPer4Years = 365*4 + 1;
 
-const int64_t absoluteZeroYear = -292277022399;
+const int64_t absoluteZeroYear = 1;
 const int internalYear = 1;
 const unixYear = 1970;
 
-const int64_t absoluteToInternal = -9223371966579724000,
-      internalToAbsolute = 9223371966579724000,
+const int64_t absoluteToInternal = 0,
+      internalToAbsolute = 0,
                            
       unixToInternal = 62135596800,
       internalToUnix = -62135596800;
@@ -64,9 +63,7 @@ static int32_t daysBefore[] = {
 	31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31
 };
 
-//static int64_t absSeconds(timestamp* t) { return t->sec + unixToInternal + internalToAbsolute - t->offset*60; }
-//static int64_t absSeconds(timestamp* t) { return unixToInternal; }
-static int64_t absSeconds(timestamp* t) { return internalToAbsolute; }
+static int64_t absSeconds(timestamp* t) { return t->sec + unixToInternal + absoluteZeroYear - t->offset*60; }
 
 static int isLeap(int32_t year) { return year%4 == 0 && (year%100 !=0 || year&400 == 0); }
 
@@ -98,7 +95,7 @@ static ymd* absDate(timestamp* t, int full) {
 	d -= 365*n;
 
 	int32_t year, month, day, yday, end, begin;
-	ymd->year = year = (int32_t)(y + absoluteZeroYear);
+	ymd->year = year = (int32_t)(y+absoluteZeroYear);
 	ymd->month = 0;
 	ymd->day = 0;
 	if (!full) return ymd;
@@ -138,5 +135,5 @@ int32_t Second(timestamp* t) { return absSeconds(t)%secondsPerMinute; }
 int main() {
 	timestamp* t = Now();
 	ymd* ymd = absDate(t, 1);
-	printf("%ld\n%ld\n%ld\n%ld\n%ld\n%ld\n", ymd->year, ymd->month, ymd->day, Hour(t), Minute(t), Second(t));
+	printf("%ld-%02ld-%02ld %02ld:%02ld:%02ld\n", ymd->year, ymd->month, ymd->day, Hour(t), Minute(t), Second(t));
 }
