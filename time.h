@@ -10,14 +10,15 @@ typedef struct {
 	int16_t offset;
 } timestamp;
 
-timestamp* Now();
+typedef timestamp* Timestamp;
+Timestamp Now();
 
-int After(timestamp *t, timestamp *u);
-int Before(timestamp *t, timestamp *u);
-int Equal(timestamp *t, timestamp *u);
+int After(Timestamp t, Timestamp u);
+int Before(Timestamp t, Timestamp u);
+int Equal(Timestamp t, Timestamp u);
 
-int32_t Hour(timestamp *t);
-int32_t Minute(timestamp *t);
+int32_t Hour(Timestamp t);
+int32_t Minute(Timestamp t);
 
 typedef int Month;
 const Month January = 1,

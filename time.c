@@ -6,9 +6,9 @@
 
 #include "time.h"
 
-timestamp*
+Timestamp
 Now() {
-	timestamp* t;
+	Timestamp t;
 	t = malloc(sizeof(*t));
 	struct timeval tv;
 	struct timezone tz;
@@ -19,9 +19,9 @@ Now() {
 	return t;
 }
 
-int After(timestamp *t, timestamp *u) { return t->sec > u->sec || t->sec == u->sec && t->nsec > u->nsec; }
-int Before(timestamp *t, timestamp *u) { return t->sec < u->sec || t->sec == u->sec && t->nsec < u->nsec; }
-int Equal(timestamp *t, timestamp *u) { return t->sec == u->sec && t->nsec == u->nsec; }
+int After(Timestamp t, Timestamp u) { return t->sec > u->sec || t->sec == u->sec && t->nsec > u->nsec; }
+int Before(Timestamp t, Timestamp u) { return t->sec < u->sec || t->sec == u->sec && t->nsec < u->nsec; }
+int Equal(Timestamp t, Timestamp u) { return t->sec == u->sec && t->nsec == u->nsec; }
 
 typedef struct {
 	int32_t year;
@@ -63,11 +63,11 @@ static int32_t daysBefore[] = {
 	31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31
 };
 
-static int64_t absSeconds(timestamp* t) { return t->sec + unixToInternal + absoluteZeroYear - t->offset*60; }
+static int64_t absSeconds(Timestamp t) { return t->sec + unixToInternal + absoluteZeroYear - t->offset*60; }
 
 static int isLeap(int32_t year) { return year%4 == 0 && (year%100 !=0 || year&400 == 0); }
 
-static ymd* absDate(timestamp* t, int full) {
+static ymd* absDate(Timestamp t, int full) {
 	int64_t abs = absSeconds(t);
 	int64_t d, n, y;
 
@@ -95,11 +95,7 @@ static ymd* absDate(timestamp* t, int full) {
 	d -= 365*n;
 
 	int32_t year, month, day, yday, end, begin;
-	ymd->year = year = (int32_t)(y+absoluteZeroYear);
-	ymd->month = 0;
-	ymd->day = 0;
-	if (!full) return ymd;
-
+	ymd->year = year = (int32_t)(y+absoluteZeroYear); ymd->month = 0; ymd->day = 0; if (!full) return ymd; 
 	yday = (int32_t)d;
 
 	day = yday;
@@ -128,12 +124,28 @@ static ymd* absDate(timestamp* t, int full) {
 	return ymd;
 }
 
-int32_t Hour(timestamp* t) { return (absSeconds(t)%secondsPerDay)/secondsPerHour; }
-int32_t Minute(timestamp* t) { return (absSeconds(t)%secondsPerHour)/secondsPerMinute; }
-int32_t Second(timestamp* t) { return absSeconds(t)%secondsPerMinute; }
+int32_t Hour(Timestamp t) { return (absSeconds(t)%secondsPerDay)/secondsPerHour; }
+int32_t Minute(Timestamp t) { return (absSeconds(t)%secondsPerHour)/secondsPerMinute; }
+int32_t Second(Timestamp t) { return absSeconds(t)%secondsPerMinute; }
 
-int main() {
-	timestamp* t = Now();
+char* Format(Timestamp t) {
+	char* stamp;
+	if ((stamp = malloc(23+1)) == NULL) return NULL;
 	ymd* ymd = absDate(t, 1);
-	printf("%ld-%02ld-%02ld %02ld:%02ld:%02ld\n", ymd->year, ymd->month, ymd->day, Hour(t), Minute(t), Second(t));
+	sprintf(stamp, "%04d-%02d-%02d %02d:%02d:%02d.%03d", ymd->year, ymd->month, ymd->day, Hour(t), Minute(t), Second(t), 0);
+	free(ymd);
+	return stamp;
 }
+
+/* Example
+int main() {
+	Timestamp t = Now();
+	char* stamp;
+	if ((stamp = Format(t)) == NULL) 
+		return 0;
+	else
+		free(t);
+	printf("%s\n", stamp);
+	free(stamp);
+	return 0;
+} */
