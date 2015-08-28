@@ -7,7 +7,7 @@
 #include "time.h"
 
 Timestamp
-Now() {
+timeNow() {
 	Timestamp t;
 	t = malloc(sizeof(*t));
 	struct timeval tv;
@@ -19,9 +19,9 @@ Now() {
 	return t;
 }
 
-int After(Timestamp t, Timestamp u) { return t->sec > u->sec || t->sec == u->sec && t->nsec > u->nsec; }
-int Before(Timestamp t, Timestamp u) { return t->sec < u->sec || t->sec == u->sec && t->nsec < u->nsec; }
-int Equal(Timestamp t, Timestamp u) { return t->sec == u->sec && t->nsec == u->nsec; }
+int timeAfter(Timestamp t, Timestamp u) { return t->sec > u->sec || t->sec == u->sec && t->nsec > u->nsec; }
+int timeBefore(Timestamp t, Timestamp u) { return t->sec < u->sec || t->sec == u->sec && t->nsec < u->nsec; }
+int timeEqual(Timestamp t, Timestamp u) { return t->sec == u->sec && t->nsec == u->nsec; }
 
 typedef struct {
 	int32_t year;
@@ -102,7 +102,7 @@ static ymd* absDate(Timestamp t, int full) {
 
 	if (isLeap(year)) {
 		if (day == 31 + 29 -1) {
-			ymd->month = February;
+			ymd->month = 2;
 			ymd->day = 29;
 			return ymd;
 		} else if (day > 31 + 29 -1) {
@@ -124,15 +124,15 @@ static ymd* absDate(Timestamp t, int full) {
 	return ymd;
 }
 
-int32_t Hour(Timestamp t) { return (absSeconds(t)%secondsPerDay)/secondsPerHour; }
-int32_t Minute(Timestamp t) { return (absSeconds(t)%secondsPerHour)/secondsPerMinute; }
-int32_t Second(Timestamp t) { return absSeconds(t)%secondsPerMinute; }
+int32_t timeHour(Timestamp t) { return (absSeconds(t)%secondsPerDay)/secondsPerHour; }
+int32_t timeMinute(Timestamp t) { return (absSeconds(t)%secondsPerHour)/secondsPerMinute; }
+int32_t timeSecond(Timestamp t) { return absSeconds(t)%secondsPerMinute; }
 
-char* Format(Timestamp t) {
+char* timeFormat(Timestamp t) {
 	char* stamp;
 	if ((stamp = malloc(23+1)) == NULL) return NULL;
 	ymd* ymd = absDate(t, 1);
-	sprintf(stamp, "%04d-%02d-%02d %02d:%02d:%02d.%03d", ymd->year, ymd->month, ymd->day, Hour(t), Minute(t), Second(t), 0);
+	sprintf(stamp, "%04d-%02d-%02d %02d:%02d:%02d.%03d", ymd->year, ymd->month, ymd->day, timeHour(t), timeMinute(t), timeSecond(t), t->nsec/1000000);
 	free(ymd);
 	return stamp;
 }

@@ -59,7 +59,7 @@ listAddNodeTail(list* list, void* value) {
 	if((node = malloc(sizeof(*node))) == NULL)
 		return NULL;
 	node->value = value;
-	if (list->len = 0 ) {
+	if (list->len == 0 ) {
 		list->head = list->tail = node;
 		node->prev = node->next = NULL;
 	} else {
@@ -111,8 +111,7 @@ listReleaseIterator(listIter* iter) {
 stack*
 stackCreate() {
 	stack* stack;
-	if ((stack = malloc(sizeof(*stack))) == NULL) 
-		return NULL;
+	if ((stack = malloc(sizeof(*stack))) == NULL) return NULL;
 	stack->top = NULL;
 	stack->free = NULL;
 	return stack;
@@ -125,8 +124,7 @@ void*
 stackPop(stack* stack) {
 	void* value;
 	stackNode* current;
-	if ((current = stack->top) == NULL)
-		return NULL;
+	if ((current = stack->top) == NULL) return NULL;
 	stack->top = current->next;
 	current->next = NULL;
 	value = current->value;
