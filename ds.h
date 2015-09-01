@@ -40,7 +40,7 @@ void listReleaseIterator(listIter* iter);
 
 #endif /* __LIST_H__ */
 
-/* __STACK_H */
+/* __STACK_H__ */
 #ifndef __STACK_H__
 #define __STACK_H__
 
@@ -61,4 +61,6 @@ void* stackPop(stack* stack);
 void* stackPeek(stack* stack);
 void* stackPush(stack* stack, void* value);
 
-#endif /* __STACK_H */
+#endif /* __STACK_H__ */
+
+
