@@ -22,3 +22,7 @@ cQueue* cqueueCreate(size_t capacity) {
 	pthread_cond_init(&cqueue->cond_full);
 	pthread_cond_init(&cqueue->cond_enpty);
 }
+
+void cEnqueue(cQueue* cqueue, void *value) {
+	pthread_mutext_lock();
+}
