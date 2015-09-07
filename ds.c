@@ -1,4 +1,4 @@
-/* list.c */
+/* double linked list */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -102,7 +102,7 @@ listReleaseIterator(listIter* iter) {
 }
 
 
-/* stack.c */
+/* stack */
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -110,11 +110,7 @@ listReleaseIterator(listIter* iter) {
 
 stack*
 stackCreate() {
-	stack* stack;
-	if ((stack = malloc(sizeof(*stack))) == NULL) return NULL;
-	stack->top = NULL;
-	stack->free = NULL;
-	return stack;
+	return listCreate();
 }
 
 void
@@ -124,8 +120,10 @@ void*
 stackPop(stack* stack) {
 	void* value;
 	stackNode* current;
-	if ((current = stack->top) == NULL) return NULL;
-	stack->top = current->next;
+	if ((current = stack->head) == NULL) return NULL;
+	stack->head = current->next;
+	if (stack->head)
+		stack->head->prev = NULL;
 	current->next = NULL;
 	value = current->value;
 	free(current);
@@ -135,16 +133,11 @@ stackPop(stack* stack) {
 void*
 stackPeek(stack* stack) {
 	stackNode* current;
-	if ((current = stack->top) == NULL) return NULL;
+	if ((current = stack->head) == NULL) return NULL;
 	return current->value;
 }
 
 void*
 stackPush(stack* stack, void* value) {
-	stackNode* node;
-	if ((node = malloc(sizeof(*node))) == NULL) return NULL;
-	node->value = value;
-	node->next = stack->top;
-	stack->top = node;
-	return value;
+	return listAddNodeHead(stack, value);
 }

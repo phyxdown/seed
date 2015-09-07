@@ -44,15 +44,9 @@ void listReleaseIterator(listIter* iter);
 #ifndef __STACK_H__
 #define __STACK_H__
 
-typedef struct stackNode {
-	struct stackNode* next;
-	void* value;
-} stackNode;
+typedef listNode stackNode;
 
-typedef struct stack {
-	stackNode *top;
-	void (*free) (void* ptr);
-} stack;
+typedef list stack;
 
 stack* stackCreate();
 void stackRelease(stack* stack);
