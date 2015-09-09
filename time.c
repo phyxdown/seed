@@ -3,13 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <features.h>
 
 #include "time.h"
-
-struct timezone {
-	int tz_minuteswest;
-	int tz_dsttime;
-};
 
 Timestamp
 timeNow() {
