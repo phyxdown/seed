@@ -7,6 +7,7 @@ cEnqueue(cQueue* cqueue, void* value) {
 
 void*
 cDequeue(cQueue* cqueue) {
+	return NULL;
 }
 
 cQueue* cqueueCreate(size_t capacity) {
@@ -21,4 +22,5 @@ cQueue* cqueueCreate(size_t capacity) {
 	pthread_mutex_init(&cqueue->mutex, NULL);
 	pthread_cond_init(&cqueue->cond_full, NULL);
 	pthread_cond_init(&cqueue->cond_empty, NULL);
+	return NULL;
 }

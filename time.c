@@ -19,8 +19,8 @@ timeNow() {
 	return t;
 }
 
-int timeAfter(Timestamp t, Timestamp u) { return t->sec > u->sec || t->sec == u->sec && t->nsec > u->nsec; }
-int timeBefore(Timestamp t, Timestamp u) { return t->sec < u->sec || t->sec == u->sec && t->nsec < u->nsec; }
+int timeAfter(Timestamp t, Timestamp u) { return t->sec > u->sec || ((t->sec == u->sec) && t->nsec > u->nsec); }
+int timeBefore(Timestamp t, Timestamp u) { return t->sec < u->sec || ((t->sec == u->sec) && t->nsec < u->nsec); }
 int timeEqual(Timestamp t, Timestamp u) { return t->sec == u->sec && t->nsec == u->nsec; }
 
 typedef struct {
@@ -39,7 +39,7 @@ const int secondsPerMinute = 60,
 
 const int64_t absoluteZeroYear = 1;
 const int internalYear = 1;
-const unixYear = 1970;
+const int unixYear = 1970;
 
 const int64_t absoluteToInternal = 0,
       internalToAbsolute = 0,
@@ -65,7 +65,7 @@ static int32_t daysBefore[] = {
 
 static int64_t absSeconds(Timestamp t) { return t->sec + unixToInternal + absoluteZeroYear - t->offset*60; }
 
-static int isLeap(int32_t year) { return year%4 == 0 && (year%100 !=0 || year&400 == 0); }
+static int isLeap(int32_t year) { return year%4 == 0 && (year%100 !=0 || year%400 == 0); }
 
 static ymd* absDate(Timestamp t, int full) {
 	int64_t abs = absSeconds(t);
