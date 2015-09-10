@@ -1,28 +1,24 @@
 #ifndef __SEED_TIME_H
 #define __SEED_TIME_H
 
-#define __SEED_TIME_API extern
-
 #include <stdint.h>
 
 typedef struct {
 	int64_t sec;    /* sec gives the number of seconds eclapsed since 1-1-1 00:00:00 */
 	int32_t nsec;   /* nanoseconds [0, 999999999] */
 	int16_t offset;
-} __seed_timestamp;
+} timestamp;
 
-typedef __seed_timestamp* __seed_timestamp_t;
+typedef timestamp* Time;
 
-typedef __seed_timestamp_t Time;
+timestamp* timeNow();
 
-__SEED_TIME_API __seed_timestamp_t timeNow();
+int timeAfter(timestamp* t, timestamp* u);
+int timeBefore(timestamp* t, timestamp* u);
+int timeEqual(timestamp* t, timestamp* u);
 
-__SEED_TIME_API int timeAfter(__seed_timestamp_t t, __seed_timestamp_t u);
-__SEED_TIME_API int timeBefore(__seed_timestamp_t t, __seed_timestamp_t u);
-__SEED_TIME_API int timeEqual(__seed_timestamp_t t, __seed_timestamp_t u);
-
-__SEED_TIME_API int32_t timeHour(__seed_timestamp_t t);
-__SEED_TIME_API int32_t timeMinute(__seed_timestamp_t t);
+int32_t timeHour(timestamp* t);
+int32_t timeMinute(timestamp* t);
 
 /**
  * return a 1991-01-30 12:00:00.990 like timestamp.
@@ -37,5 +33,5 @@ __SEED_TIME_API int32_t timeMinute(__seed_timestamp_t t);
  * 	free(ts_now);
  * 	free(tm_now);
  * */
-__SEED_TIME_API char* timeFormat(__seed_timestamp_t t);
+char* timeFormat(timestamp* t);
 #endif

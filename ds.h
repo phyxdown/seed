@@ -1,10 +1,7 @@
-/* __LIST_H__ */
-#ifndef __LIST_H__
-#define __LIST_H__
+#ifndef __SEED_LIST_H
+#define __SEED_LIST_H
 
 #include <stdio.h>
-
-/* general double linked list */
 
 typedef struct listNode {
 	struct listNode* prev;
@@ -38,11 +35,10 @@ void listReleaseIterator(listIter* iter);
 #define LIST_START_HEAD 0
 #define LIST_START_TAIL 1
 
-#endif /* __LIST_H__ */
+#endif
 
-/* __STACK_H__ */
-#ifndef __STACK_H__
-#define __STACK_H__
+#ifndef __SEED_STACK_H
+#define __SEED_STACK_H
 
 typedef listNode stackNode;
 
@@ -55,6 +51,4 @@ void* stackPop(stack* stack);
 void* stackPeek(stack* stack);
 void* stackPush(stack* stack, void* value);
 
-#endif /* __STACK_H__ */
-
-
+#endif
