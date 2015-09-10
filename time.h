@@ -24,5 +24,18 @@ __SEED_TIME_API int timeEqual(__seed_timestamp_t t, __seed_timestamp_t u);
 __SEED_TIME_API int32_t timeHour(__seed_timestamp_t t);
 __SEED_TIME_API int32_t timeMinute(__seed_timestamp_t t);
 
+/**
+ * return a 1991-01-30 12:00:00.990 like timestamp.
+ *
+ * USAGE
+ *
+ * 	Time tm_now = timeNow();
+ * 	char* ts_now = timeFormat(tm_now);
+ *
+ * 	dosomething(ts_now);
+ *
+ * 	free(ts_now);
+ * 	free(tm_now);
+ * */
 __SEED_TIME_API char* timeFormat(__seed_timestamp_t t);
 #endif
