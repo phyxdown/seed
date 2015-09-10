@@ -1,6 +1,7 @@
-/* __TIME_H__ */
-#ifndef __TIME_H__
-#define __TIME_H__
+#ifndef __SEED_TIME_H
+#define __SEED_TIME_H
+
+#define __SEED_TIME_API extern
 
 #include <stdint.h>
 
@@ -8,20 +9,20 @@ typedef struct {
 	int64_t sec;    /* sec gives the number of seconds eclapsed since 1-1-1 00:00:00 */
 	int32_t nsec;   /* nanoseconds [0, 999999999] */
 	int16_t offset;
-} timestamp;
+} __seed_timestamp;
 
-typedef timestamp* Timestamp;
-Timestamp timeNow();
+typedef __seed_timestamp* __seed_timestamp_t;
 
-int timeAfter(Timestamp t, Timestamp u);
-int timeBefore(Timestamp t, Timestamp u);
-int timeEqual(Timestamp t, Timestamp u);
+typedef __seed_timestamp_t Time;
 
-int32_t timeHour(Timestamp t);
-int32_t timeMinute(Timestamp t);
+__SEED_TIME_API __seed_timestamp_t timeNow();
 
-typedef int Month;
-typedef int Weekday;
+__SEED_TIME_API int timeAfter(__seed_timestamp_t t, __seed_timestamp_t u);
+__SEED_TIME_API int timeBefore(__seed_timestamp_t t, __seed_timestamp_t u);
+__SEED_TIME_API int timeEqual(__seed_timestamp_t t, __seed_timestamp_t u);
 
-char* timeFormat(Timestamp t);
-#endif/* __TIME_H__ */
+__SEED_TIME_API int32_t timeHour(__seed_timestamp_t t);
+__SEED_TIME_API int32_t timeMinute(__seed_timestamp_t t);
+
+__SEED_TIME_API char* timeFormat(__seed_timestamp_t t);
+#endif

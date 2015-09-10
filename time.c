@@ -6,9 +6,12 @@
 
 #include "time.h"
 
-Timestamp
+typedef int Month;
+typedef int Weekday;
+
+__seed_timestamp*
 timeNow() {
-	Timestamp t;
+	__seed_timestamp* t;
 	t = malloc(sizeof(*t));
 	struct timeval tv;
 	struct timezone tz;
@@ -19,9 +22,9 @@ timeNow() {
 	return t;
 }
 
-int timeAfter(Timestamp t, Timestamp u) { return t->sec > u->sec || ((t->sec == u->sec) && t->nsec > u->nsec); }
-int timeBefore(Timestamp t, Timestamp u) { return t->sec < u->sec || ((t->sec == u->sec) && t->nsec < u->nsec); }
-int timeEqual(Timestamp t, Timestamp u) { return t->sec == u->sec && t->nsec == u->nsec; }
+int timeAfter(__seed_timestamp* t, __seed_timestamp* u) { return t->sec > u->sec || ((t->sec == u->sec) && t->nsec > u->nsec); }
+int timeBefore(__seed_timestamp* t, __seed_timestamp* u) { return t->sec < u->sec || ((t->sec == u->sec) && t->nsec < u->nsec); }
+int timeEqual(__seed_timestamp* t, __seed_timestamp* u) { return t->sec == u->sec && t->nsec == u->nsec; }
 
 typedef struct {
 	int32_t year;
@@ -63,11 +66,11 @@ static int32_t daysBefore[] = {
 	31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31
 };
 
-static int64_t absSeconds(Timestamp t) { return t->sec + unixToInternal + absoluteZeroYear - t->offset*60; }
+static int64_t absSeconds(__seed_timestamp* t) { return t->sec + unixToInternal + absoluteZeroYear - t->offset*60; }
 
 static int isLeap(int32_t year) { return year%4 == 0 && (year%100 !=0 || year%400 == 0); }
 
-static ymd* absDate(Timestamp t, int full) {
+static ymd* absDate(__seed_timestamp* t, int full) {
 	int64_t abs = absSeconds(t);
 	int64_t d, n, y;
 
@@ -124,11 +127,11 @@ static ymd* absDate(Timestamp t, int full) {
 	return ymd;
 }
 
-int32_t timeHour(Timestamp t) { return (absSeconds(t)%secondsPerDay)/secondsPerHour; }
-int32_t timeMinute(Timestamp t) { return (absSeconds(t)%secondsPerHour)/secondsPerMinute; }
-int32_t timeSecond(Timestamp t) { return absSeconds(t)%secondsPerMinute; }
+int32_t timeHour(__seed_timestamp* t) { return (absSeconds(t)%secondsPerDay)/secondsPerHour; }
+int32_t timeMinute(__seed_timestamp* t) { return (absSeconds(t)%secondsPerHour)/secondsPerMinute; }
+int32_t timeSecond(__seed_timestamp* t) { return absSeconds(t)%secondsPerMinute; }
 
-char* timeFormat(Timestamp t) {
+char* timeFormat(__seed_timestamp* t) {
 	char* stamp;
 	if ((stamp = malloc(23+1)) == NULL) return NULL;
 	ymd* ymd = absDate(t, 1);
@@ -136,16 +139,3 @@ char* timeFormat(Timestamp t) {
 	free(ymd);
 	return stamp;
 }
-
-/* Example
-int main() {
-	Timestamp t = Now();
-	char* stamp;
-	if ((stamp = Format(t)) == NULL) 
-		return 0;
-	else
-		free(t);
-	printf("%s\n", stamp);
-	free(stamp);
-	return 0;
-} */
