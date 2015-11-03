@@ -140,6 +140,7 @@ char* timeFormat(timestamp* t) {
 	return stamp;
 }
 
+/*
 int main() {
 	setenv("MALLOC_TRACE", "output", 1);
 	mtrace();
@@ -149,4 +150,4 @@ int main() {
 	printf("%s", ts_now);
 	free(ts_now);
 	free(tm_now);
-}
+}*/
