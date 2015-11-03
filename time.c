@@ -139,3 +139,14 @@ char* timeFormat(timestamp* t) {
 	free(ymd);
 	return stamp;
 }
+
+int main() {
+	setenv("MALLOC_TRACE", "output", 1);
+	mtrace();
+
+	Time tm_now = timeNow();
+	char* ts_now = timeFormat(tm_now);
+	printf("%s", ts_now);
+	free(ts_now);
+	free(tm_now);
+}
