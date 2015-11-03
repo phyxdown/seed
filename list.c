@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ds.h"
+#include "list.h"
 
 list*
 listCreate() {
@@ -106,7 +106,7 @@ listReleaseIterator(listIter* iter) {
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "ds.h"
+#include "list.h"
 
 stack*
 stackCreate() {
