@@ -34,5 +34,6 @@
 # Memory Trace
 output
 
-# Autocache
+# Folders
 autom4te.cache
+build
