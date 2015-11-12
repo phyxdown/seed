@@ -33,3 +33,6 @@
 
 # Memory Trace
 output
+
+# Autocache
+autom4te.cache
