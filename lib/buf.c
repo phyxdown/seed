@@ -4,18 +4,18 @@
 
 #include "buf.h"
 
-Buf bufnew(const char *init) {
+Buf bufNew(const char *init) {
 	Buf buffer;
 	size_t initlen = strlen(init);
 	buffer = malloc(sizeof(struct buf) + initlen + 1);
 	if (buffer == NULL) return NULL;
 	buffer->len = 0;
 	buffer->free = initlen;
-	buffer = bufcat(buffer, init);
+	buffer = bufCat(buffer, init);
 	return buffer;
 }
 
-Buf bufcat(Buf buffer, const char *add) {
+Buf bufCat(Buf buffer, const char *add) {
 	size_t addlen = strlen(add);
 	if (addlen > buffer->free) {
 		size_t newlen = buffer->len + addlen;
@@ -31,7 +31,7 @@ Buf bufcat(Buf buffer, const char *add) {
 	return buffer;
 }
 
-Buf bufvcatf(Buf buffer, const char *fmt, va_list ap) {
+Buf bufVcatf(Buf buffer, const char *fmt, va_list ap) {
 	va_list cpy;
 	char staticbuf[1024], *buf = staticbuf;
 	size_t buflen = strlen(fmt)*2;
@@ -55,15 +55,15 @@ Buf bufvcatf(Buf buffer, const char *fmt, va_list ap) {
 		}
 		break;
 	}
-	buffer = bufcat(buffer, buf);
+	buffer = bufCat(buffer, buf);
 	if (buf != staticbuf) free(buf);
 	return buffer;
 }
 
-Buf bufcatf(Buf buffer, const char *fmt, ...) {
+Buf bufCatf(Buf buffer, const char *fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
-		buffer = bufvcatf(buffer, fmt, ap);
+		buffer = bufVcatf(buffer, fmt, ap);
 	va_end(ap);
 	return buffer;
 }

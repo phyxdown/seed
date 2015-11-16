@@ -20,13 +20,13 @@ struct buf {
 
 typedef struct buf* Buf;
 
-Buf bufnew(const char *init);
+Buf bufNew(const char *init);
 
-Buf bufcat(Buf buffer, const char *add);
+Buf bufCat(Buf buffer, const char *add);
 
-Buf bufcatf(Buf buffer, const char *fmt, ...)
+Buf bufCatf(Buf buffer, const char *fmt, ...)
 	__Attribute__((format(printf, 2, 3)));
 
-Buf bufvcatf(Buf buffer, const char *fmt, va_list ap);
+Buf bufVcatf(Buf buffer, const char *fmt, va_list ap);
 
 #endif /* __BUF_H__ */
