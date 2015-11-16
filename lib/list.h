@@ -23,6 +23,8 @@ typedef struct list {
 	int (*match) (void *ptr, void *key);
 } list;
 
+typedef struct list* List;
+
 list* listCreate();
 void  listRelease(list* list);
 list* listAddNodeHead(list* list, void* value);
@@ -43,6 +45,8 @@ void listReleaseIterator(listIter* iter);
 typedef listNode stackNode;
 
 typedef list stack;
+
+typedef stack* Stack;
 
 stack* stackCreate();
 void stackRelease(stack* stack);

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-typedef struct {
+typedef struct timestamp {
 	int64_t sec;    /* sec gives the number of seconds eclapsed since 1-1-1 00:00:00 */
 	int32_t nsec;   /* nanoseconds [0, 999999999] */
 	int16_t offset;

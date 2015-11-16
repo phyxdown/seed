@@ -12,21 +12,18 @@
 
 #include "defs.h"
 
-struct buf {
+typedef struct buf {
 	size_t len;
 	size_t free;
 	char data[];
-};
+} buf;
 
 typedef struct buf* Buf;
 
-Buf bufNew(const char *init);
-
-Buf bufCat(Buf buffer, const char *add);
-
-Buf bufCatf(Buf buffer, const char *fmt, ...)
-	__Attribute__((format(printf, 2, 3)));
-
-Buf bufVcatf(Buf buffer, const char *fmt, va_list ap);
+buf* bufNew(const char *init);
+buf* bufCat(Buf buffer, const char *add);
+buf* bufCatf(Buf buffer, const char *fmt, ...)
+         __Attribute__((format(printf, 2, 3)));
+buf* bufVcatf(Buf buffer, const char *fmt, va_list ap);
 
 #endif /* __BUF_H__ */
