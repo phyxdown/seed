@@ -17,7 +17,7 @@ int tcpDial(const char *host, int port) {
 	if (inet_pton(AF_INET, host, &servaddr.sin_addr) < 0)
 		return -1;
 
-	if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr) < 0))
+	if (connect(sockfd, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
 		return -1;
 	return sockfd;
 }
