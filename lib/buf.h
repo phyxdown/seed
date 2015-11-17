@@ -1,5 +1,5 @@
-#ifndef __BUF_H__
-#define __BUF_H__
+#ifndef __SEED_BUF_H
+#define __SEED_BUF_H
 
 #define EmptyString ""
 #define TAB "\t"
@@ -26,4 +26,4 @@ buf* bufCatf(Buf buffer, const char *fmt, ...)
          __Attribute__((format(printf, 2, 3)));
 buf* bufVcatf(Buf buffer, const char *fmt, va_list ap);
 
-#endif /* __BUF_H__ */
+#endif
