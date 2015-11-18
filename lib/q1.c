@@ -4,6 +4,9 @@
 
 #include "q1.h"
 
+#define CAS(ptr, old, new) \
+	 (__sync_bool_compare_and_swap((ptr), (old), (new)))
+
 struct q1Pointer {
 	q1Node* target;
 	int32_t tag;
@@ -35,6 +38,20 @@ q1* q1New() {
 }
 void  q1Release (q1* queue);
 
-void  q1Enqueue (q1* queue, void *value);
+void  q1Enqueue (q1* queue, void *value) {
+	q1Pointer tail, temp;
+	q1Node* nd = new_node();
+	nd->value = value;
+	while(1) {
+		tail = queue->tail;
+		nd->next = (q1Pointer){ tail.target, tail.tag+1 };
+                temp = (q1Pointer){ nd, tail.tag+1 };
+		if (CAS( &(queue->tail) , tail, temp)) {
+			(tail.target)->prev = (q1Pointer){ nd, tail.tag };
+			break;
+		}
+	}
+}
+
 void* q1Dequeue (q1* queue);
 
