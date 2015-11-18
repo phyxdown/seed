@@ -12,6 +12,7 @@ typedef struct timestamp {
 typedef timestamp* Time;
 
 timestamp* timeNow();
+void timeRelease(timestamp* t);
 
 int timeAfter(timestamp* t, timestamp* u);
 int timeBefore(timestamp* t, timestamp* u);
@@ -34,4 +35,18 @@ int32_t timeMinute(timestamp* t);
  * 	free(tm_now);
  * */
 char* timeFormat(timestamp* t);
+
+/**
+ *
+ * USAGE
+ *
+ * 	int32_t hourage;
+ * 	Time tm_now = timeNow();
+ * 	hourage = timeUnixHourage(ts_now);
+ * 	free(tm_now);
+ *
+ * 	dosomething(hourage);
+ * */
+
+int32_t timeUnixHourage(timestamp* t);
 #endif

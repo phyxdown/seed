@@ -22,6 +22,10 @@ timeNow() {
 	return t;
 }
 
+void timeRelease(timestamp* t) {
+	free(t);
+}
+
 int timeAfter(timestamp* t, timestamp* u) { return t->sec > u->sec || ((t->sec == u->sec) && t->nsec > u->nsec); }
 int timeBefore(timestamp* t, timestamp* u) { return t->sec < u->sec || ((t->sec == u->sec) && t->nsec < u->nsec); }
 int timeEqual(timestamp* t, timestamp* u) { return t->sec == u->sec && t->nsec == u->nsec; }
