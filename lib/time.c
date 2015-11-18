@@ -145,6 +145,5 @@ char* timeFormat(timestamp* t) {
 }
 
 int32_t timeUnixHourage(timestamp* t) {
-	printf("%d, %d", t->sec, t->sec/secondsPerHour);
 	return t->sec/secondsPerHour;
 }
