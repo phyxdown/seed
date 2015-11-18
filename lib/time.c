@@ -140,14 +140,7 @@ char* timeFormat(timestamp* t) {
 	return stamp;
 }
 
-/*
-int main() {
-	setenv("MALLOC_TRACE", "output", 1);
-	mtrace();
-
-	Time tm_now = timeNow();
-	char* ts_now = timeFormat(tm_now);
-	printf("%s", ts_now);
-	free(ts_now);
-	free(tm_now);
-}*/
+int32_t timeUnixHourage(timestamp* t) {
+	printf("%d, %d", t->sec, t->sec/secondsPerHour);
+	return t->sec/secondsPerHour;
+}
