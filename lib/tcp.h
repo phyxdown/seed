@@ -12,5 +12,3 @@ size_t tcpWrite(int socketfd, char *buffer, size_t length);
 size_t tcpRead(int socketfd, char *buffer, size_t length);
 
 #endif
-
-
