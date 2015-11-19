@@ -4,8 +4,8 @@
 
 #include "buf.h"
 
-Buf bufNew(const char *init) {
-	Buf buffer;
+buf* bufNew(const char *init) {
+	buf* buffer;
 	size_t initlen = strlen(init);
 	buffer = malloc(sizeof(struct buf) + initlen + 1);
 	if (buffer == NULL) return NULL;
@@ -15,7 +15,7 @@ Buf bufNew(const char *init) {
 	return buffer;
 }
 
-Buf bufCat(Buf buffer, const char *add) {
+buf* bufCat(buf* buffer, const char *add) {
 	size_t addlen = strlen(add);
 	if (addlen > buffer->free) {
 		size_t newlen = buffer->len + addlen;
@@ -31,7 +31,7 @@ Buf bufCat(Buf buffer, const char *add) {
 	return buffer;
 }
 
-Buf bufVcatf(Buf buffer, const char *fmt, va_list ap) {
+buf* bufVcatf(buf* buffer, const char *fmt, va_list ap) {
 	va_list cpy;
 	char staticbuf[1024], *buf = staticbuf;
 	size_t buflen = strlen(fmt)*2;
@@ -60,7 +60,7 @@ Buf bufVcatf(Buf buffer, const char *fmt, va_list ap) {
 	return buffer;
 }
 
-Buf bufCatf(Buf buffer, const char *fmt, ...) {
+buf* bufCatf(buf* buffer, const char *fmt, ...) {
 	va_list ap;
 	va_start(ap, fmt);
 		buffer = bufVcatf(buffer, fmt, ap);

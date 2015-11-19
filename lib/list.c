@@ -4,8 +4,7 @@
 
 #include "list.h"
 
-list*
-listCreate() {
+list* listCreate() {
 	list* list;
 	if ((list = malloc(sizeof(*list))) == NULL) 
 		return NULL;
@@ -17,8 +16,7 @@ listCreate() {
 	return list;
 }
 
-void
-listRelease(list* list) {
+void listRelease(list* list) {
 	size_t len;
 	listNode* current;
 	listNode* next;
@@ -34,8 +32,7 @@ listRelease(list* list) {
 	free(list);
 }
 
-list*
-listAddNodeHead(list* list, void* value) {
+list* listAddNodeHead(list* list, void* value) {
 	listNode* node;
 	if((node = malloc(sizeof(*node))) == NULL)
 		return NULL;
@@ -53,8 +50,7 @@ listAddNodeHead(list* list, void* value) {
 	return list;
 }
 
-list*
-listAddNodeTail(list* list, void* value) {
+list* listAddNodeTail(list* list, void* value) {
 	listNode* node;
 	if((node = malloc(sizeof(*node))) == NULL)
 		return NULL;
@@ -72,8 +68,7 @@ listAddNodeTail(list* list, void* value) {
 	return list;
 }
 
-listIter*
-listGetIterator(list* list, int direction) {
+listIter* listGetIterator(list* list, int direction) {
 	listIter* iter;
 	if ((iter = malloc(sizeof(*iter))) == NULL) return NULL;
 	if (direction == LIST_START_HEAD) iter->next = list->head;
@@ -83,8 +78,7 @@ listGetIterator(list* list, int direction) {
 }
 
 
-listNode*
-listNext(listIter* iter) {
+listNode* listNext(listIter* iter) {
 	listNode* current = iter->next;
 
 	if (current != NULL) {
@@ -96,8 +90,7 @@ listNext(listIter* iter) {
 	return current;
 }
 
-void
-listReleaseIterator(listIter* iter) {
+void listReleaseIterator(listIter* iter) {
 	free(iter);
 }
 
@@ -108,16 +101,13 @@ listReleaseIterator(listIter* iter) {
 
 #include "list.h"
 
-stack*
-stackCreate() {
+stack* stackCreate() {
 	return listCreate();
 }
 
-void
-stackRelease(stack* stack) {}
+void stackRelease(stack* stack) {}
 
-void*
-stackPop(stack* stack) {
+void* stackPop(stack* stack) {
 	void* value;
 	stackNode* current;
 	if ((current = stack->head) == NULL) return NULL;
@@ -130,14 +120,12 @@ stackPop(stack* stack) {
 	return value;
 }
 
-void*
-stackPeek(stack* stack) {
+void* stackPeek(stack* stack) {
 	stackNode* current;
 	if ((current = stack->head) == NULL) return NULL;
 	return current->value;
 }
 
-void*
-stackPush(stack* stack, void* value) {
+void* stackPush(stack* stack, void* value) {
 	return listAddNodeHead(stack, value);
 }

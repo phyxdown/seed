@@ -9,8 +9,7 @@
 typedef int Month;
 typedef int Weekday;
 
-timestamp*
-timeNow() {
+timestamp* timeNow() {
 	timestamp* t;
 	t = malloc(sizeof(*t));
 	struct timeval tv;
