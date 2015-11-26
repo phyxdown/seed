@@ -53,6 +53,23 @@ void stackRelease(stack* stack);
 
 void* stackPop(stack* stack);
 void* stackPeek(stack* stack);
-void* stackPush(stack* stack, void* value);
+stack* stackPush(stack* stack, void* value);
+
+#endif
+
+#ifndef __SEED_QUEUE_H
+#define __SEED_QUEUE_H
+
+typedef listNode queueNode;
+
+typedef list queue;
+
+typedef queue* Queue;
+
+queue* queueCreate();
+void queueRelease(stack* stack);
+
+queue* queueEnqueue(stack* stack, void* value);
+void* queueDnqueue(stack* stack);
 
 #endif

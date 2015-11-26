@@ -27,7 +27,7 @@ static q1Node* new_node() { return NULL; }
 static void free_node() {}
 
 q1* q1New() {
-	q1* q; q = (q1*)malloc(sizeof(*q));
+	q1 *q; q = (q1*)malloc(sizeof(*q));
 
 	q1Node* nd = new_node();
 	nd->next = (q1Pointer){ NULL, 0 };

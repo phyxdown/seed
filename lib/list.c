@@ -96,16 +96,13 @@ void listReleaseIterator(listIter* iter) {
 
 
 /* stack */
-#include <stdio.h>
-#include <stdlib.h>
-
-#include "list.h"
-
 stack* stackCreate() {
 	return listCreate();
 }
 
-void stackRelease(stack* stack) {}
+void stackRelease(stack* stack) {
+	listRelease(stack);
+}
 
 void* stackPop(stack* stack) {
 	void* value;
@@ -126,6 +123,24 @@ void* stackPeek(stack* stack) {
 	return current->value;
 }
 
-void* stackPush(stack* stack, void* value) {
+stack* stackPush(stack* stack, void* value) {
 	return listAddNodeHead(stack, value);
+}
+
+
+/* queue */
+queue* queueCreate() {
+	return listCreate();
+}
+
+void queueRelease(stack* stack) {
+	return listRelease(stack);
+}
+
+queue* queueEnqueue(stack* stack, void* value) {
+	return listAddNodeTail(stack, value);
+}
+
+void* queueDnqueue(stack* stack) {
+	return stackPop(stack);
 }
