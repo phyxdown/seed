@@ -123,7 +123,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(seedincdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libseed_la_LIBADD =
-am_libseed_la_OBJECTS = buf.lo time.lo list.lo tcp.lo q1.lo
+am_libseed_la_OBJECTS = buf.lo time.lo list.lo tcp.lo bq.lo
 libseed_la_OBJECTS = $(am_libseed_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -307,8 +307,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 seedincdir = $(includedir)/seed
 lib_LTLIBRARIES = libseed.la
-libseed_la_SOURCES = defs.h buf.c buf.h time.c time.h list.c list.h tcp.c tcp.h q/q1.c q/q.h
-seedinc_HEADERS = defs.h buf.h time.h list.h tcp.h q.h
+libseed_la_SOURCES = defs.h buf.c buf.h time.c time.h list.c list.h tcp.c tcp.h concurrent/bq.c
+seedinc_HEADERS = defs.h buf.h time.h list.h tcp.h concurrent.h
 all: all-am
 
 .SUFFIXES:
@@ -388,9 +388,9 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bq.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/q1.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/time.Plo@am__quote@
 
@@ -415,12 +415,12 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
 
-q1.lo: q/q1.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT q1.lo -MD -MP -MF $(DEPDIR)/q1.Tpo -c -o q1.lo `test -f 'q/q1.c' || echo '$(srcdir)/'`q/q1.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/q1.Tpo $(DEPDIR)/q1.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='q/q1.c' object='q1.lo' libtool=yes @AMDEPBACKSLASH@
+bq.lo: concurrent/bq.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT bq.lo -MD -MP -MF $(DEPDIR)/bq.Tpo -c -o bq.lo `test -f 'concurrent/bq.c' || echo '$(srcdir)/'`concurrent/bq.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/bq.Tpo $(DEPDIR)/bq.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='concurrent/bq.c' object='bq.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o q1.lo `test -f 'q/q1.c' || echo '$(srcdir)/'`q/q1.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o bq.lo `test -f 'concurrent/bq.c' || echo '$(srcdir)/'`concurrent/bq.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
