@@ -1,5 +1,5 @@
-#ifndef __DEFS_H__
-#define __DEFS_H__
+#ifndef __SEED_DEFS_H
+#define __SEED_DEFS_H
 
 #ifdef __GNUC__
 #define __Attribute__(X) __attribute__(X)
@@ -11,4 +11,4 @@
 #define tls __thread
 #endif
 
-#endif /* __DEFS_H__ */
+#endif
