@@ -56,7 +56,7 @@ static int seed_concurrent_bq_dequeue(cqmthz *q, void **v) {
 		*v = NULL;
 	} else {
 		*v = bq->tail->value;
-		if (bq->tail->prev = NULL) {
+		if (bq->tail->prev == NULL) {
 			free(bq->tail);
 			bq->head = bq->tail = NULL;
 		} else {
