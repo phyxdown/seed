@@ -2,9 +2,9 @@
 #define __SEED_CONCURRENT_H
 
 typedef struct cqmthz {
-	void  (*Enqueue)(struct cqmthz *queue, void *value);
-	void* (*Dequeue)(struct cqmthz *queue);
-	void  (*Release)(struct cqmthz *queue);
+	int  (*Enqueue)(struct cqmthz *q, void *v);
+	int  (*Dequeue)(struct cqmthz *q, void **v);
+	void (*Release)(struct cqmthz *q);
 } cqmthz;
 
 typedef struct cqmthz* ConcurrentQueue;
