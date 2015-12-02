@@ -15,8 +15,11 @@ buf* bufNew(const char *init) {
 	return buffer;
 }
 
-buf* bufRelease(Buf buf) {
-	free(buf);
+void bufRelease(Buf buf) {
+	if (buf != NULL) {
+		printf("%s", buf);
+	       	free(buf);
+	}
 }
 
 buf* bufCat(buf* buffer, const char *add) {
@@ -25,8 +28,9 @@ buf* bufCat(buf* buffer, const char *add) {
 		size_t newlen = buffer->len + addlen;
 		if (newlen < BUF_MAX_PREALLOC) newlen *= 2;
 		else newlen += BUF_MAX_PREALLOC;
-		buffer = realloc(buffer, sizeof(struct buf)+ newlen + 1);
-		if (buffer == NULL) return NULL;
+		buf* nbuffer = realloc(buffer, sizeof(struct buf)+ newlen + 1);
+		if (nbuffer == NULL) return buffer;
+		else buffer = nbuffer;
 		buffer->free = newlen - buffer->len;
 	}
 	strcpy(&buffer->data[buffer->len], add);
