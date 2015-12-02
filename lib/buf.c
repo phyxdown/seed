@@ -11,7 +11,8 @@ buf* bufNew(const char *init) {
 	if (buffer == NULL) return NULL;
 	buffer->len = 0;
 	buffer->free = initlen;
-	buffer = bufCat(buffer, init);
+	buffer->data[buffer->len] = '\0';
+	if (initlen > 0) buffer = bufCat(buffer, init);
 	return buffer;
 }
 
@@ -35,6 +36,7 @@ buf* bufCat(buf* buffer, const char *add) {
 	strcpy(&buffer->data[buffer->len], add);
 	buffer->len += addlen;
 	buffer->free -= addlen;
+	buffer->data[buffer->len] = '\0';
 	return buffer;
 }
 
