@@ -12,7 +12,7 @@ buf* bufNew(const char *init) {
 	buffer->len = 0;
 	buffer->free = initlen;
 	buffer->data[buffer->len] = '\0';
-	if (initlen > 0) buffer = bufCat(buffer, init);
+	buffer = bufCat(buffer, init);
 	return buffer;
 }
 
@@ -24,6 +24,7 @@ void bufRelease(Buf buf) {
 
 buf* bufCat(buf* buffer, const char *add) {
 	size_t addlen = strlen(add);
+	if (addlen == 0) return buffer;
 	if (addlen > buffer->free) {
 		size_t newlen = buffer->len + addlen;
 		if (newlen < BUF_MAX_PREALLOC) newlen *= 2;
