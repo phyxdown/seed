@@ -17,7 +17,6 @@ buf* bufNew(const char *init) {
 
 void bufRelease(Buf buf) {
 	if (buf != NULL) {
-		printf("%s", buf);
 	       	free(buf);
 	}
 }
