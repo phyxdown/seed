@@ -94,8 +94,6 @@ void listReleaseIterator(listIter* iter) {
 	free(iter);
 }
 
-
-/* stack */
 stack* stackCreate() {
 	return listCreate();
 }
@@ -132,8 +130,6 @@ stack* stackPush(stack* stack, void* value) {
 	return listAddNodeHead(stack, value);
 }
 
-
-/* queue */
 queue* queueCreate() {
 	return listCreate();
 }

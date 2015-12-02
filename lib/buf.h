@@ -21,6 +21,7 @@ typedef struct buf {
 typedef struct buf* Buf;
 
 buf* bufNew(const char *init);
+buf* bufRelease(Buf buf);
 buf* bufCat(Buf buffer, const char *add);
 buf* bufCatf(Buf buffer, const char *fmt, ...)
          __Attribute__((format(printf, 2, 3)));

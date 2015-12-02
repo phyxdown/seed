@@ -15,6 +15,10 @@ buf* bufNew(const char *init) {
 	return buffer;
 }
 
+buf* bufRelease(Buf buf) {
+	free(buf);
+}
+
 buf* bufCat(buf* buffer, const char *add) {
 	size_t addlen = strlen(add);
 	if (addlen > buffer->free) {
