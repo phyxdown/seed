@@ -106,7 +106,7 @@ void stackRelease(stack* stack) {
 
 void* stackPop(stack* stack) {
 	void* value;
-	if (stack->head == NULL) {value = NULL;
+	if (stack->head == NULL) value = NULL;
 	else {
 		value = stack->head->value;
 		if (stack->head->next == NULL) {
