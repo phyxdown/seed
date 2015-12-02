@@ -105,46 +105,21 @@ void stackRelease(stack* stack) {
 }
 
 void* stackPop(stack* stack) {
-	printf("0\n");
 	void* value;
-	printf("1\n");
 	if (stack->head == NULL) {value = NULL;
-	printf("2\n");}
 	else {
-	printf("3\n");
 		value = stack->head->value;
-	printf("4\n");
 		if (stack->head->next == NULL) {
-	printf("5\n");
 			free(stack->head);
-	printf("6\n");
 			stack->head = stack->tail = NULL;
-	printf("7\n");
 		} else {
-	printf("8\n");
 			stack->head = stack->head->next;
-	printf("9\n");
 			free(stack->head->prev);
-	printf("10\n");
 			stack->head->prev = NULL;
-	printf("11\n");
 		}
 		stack->len --;
-	printf("12\n");
 	}
 	return value;
-
-	/*
-	stackNode* current;
-	if ((current = stack->head) == NULL) return NULL;
-	stack->head = current->next;
-	if (stack->head)
-		stack->head->prev = NULL;
-	current->next = NULL;
-	value = current->value;
-	free(current);
-	return value;
-	*/
 }
 
 void* stackPeek(stack* stack) {
