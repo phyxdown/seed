@@ -36,6 +36,7 @@ static int seed_concurrent_bq_enqueue(cqmthz *q, void *v) {
 	if (bq == NULL) return seed_concurrent_bq_status_err_invalue;
 	if (0 != pthread_mutex_lock(bq->mutex)) return seed_concurrent_bq_status_err_lock;
 	seed_concurrent_bq_node* nd; nd = malloc(sizeof(*nd));
+	nd->value = v;
 	if (bq->head == NULL) {
 		bq->tail = bq->head = nd;
 		nd->prev = nd->next = NULL;
