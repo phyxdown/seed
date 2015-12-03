@@ -69,7 +69,7 @@ list* listAddNodeTail(list* list, void* value) {
 	return list;
 }
 
-listIter* listGetIterator(list* list, int direction) {
+listIter* listNewIterator(list* list, int direction) {
 	listIter* iter;
 	if ((iter = malloc(sizeof(*iter))) == NULL) return NULL;
 	if (direction == LIST_START_HEAD) iter->next = list->head;
@@ -92,6 +92,7 @@ listNode* listNext(listIter* iter) {
 }
 
 void listReleaseIterator(listIter* iter) {
+	if (iter == NULL) return;
 	free(iter);
 }
 
