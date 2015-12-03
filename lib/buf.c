@@ -17,9 +17,8 @@ buf* bufNew(const char *init) {
 }
 
 void bufRelease(Buf buf) {
-	if (buf != NULL) {
-	       	free(buf);
-	}
+	if (buf == NULL) return;
+	free(buf);
 }
 
 buf* bufCat(buf* buffer, const char *add) {

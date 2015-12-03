@@ -22,6 +22,7 @@ timestamp* timeNow() {
 }
 
 void timeRelease(timestamp* t) {
+	if (t == NULL) return;
 	free(t);
 }
 

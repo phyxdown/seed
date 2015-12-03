@@ -17,6 +17,7 @@ list* listCreate() {
 }
 
 void listRelease(list* list) {
+	if (list == NULL) return;
 	size_t len;
 	listNode* current;
 	listNode* next;
