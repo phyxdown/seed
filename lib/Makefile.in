@@ -123,7 +123,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(seedincdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libseed_la_LIBADD =
-am_libseed_la_OBJECTS = buf.lo time.lo list.lo tcp.lo bq.lo
+am_libseed_la_OBJECTS = buf.lo time.lo list.lo tcp.lo net.lo bq.lo
 libseed_la_OBJECTS = $(am_libseed_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -307,8 +307,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 seedincdir = $(includedir)/seed
 lib_LTLIBRARIES = libseed.la
-libseed_la_SOURCES = defs.h buf.c buf.h time.c time.h list.c list.h tcp.c tcp.h concurrent/bq.c concurrent/api.h
-seedinc_HEADERS = defs.h buf.h time.h list.h tcp.h concurrent.h
+libseed_la_SOURCES = defs.h buf.c buf.h time.c time.h list.c list.h tcp.c tcp.h net.c net.h concurrent/bq.c concurrent/api.h
+seedinc_HEADERS = defs.h buf.h time.h list.h tcp.h concurrent.h net.h
 all: all-am
 
 .SUFFIXES:
@@ -391,6 +391,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bq.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buf.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/list.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/net.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tcp.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/time.Plo@am__quote@
 

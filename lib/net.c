@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
 
-int seed_net_GetHostIP(char* ret) {
+int seed_net_GetHostIp(char* ret) {
 	int sockfd;
 	struct ifconf ifconf;
 	char buf[1024];
