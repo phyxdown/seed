@@ -135,6 +135,10 @@ int32_t timeHour(timestamp* t) { return (absSeconds(t)%secondsPerDay)/secondsPer
 int32_t timeMinute(timestamp* t) { return (absSeconds(t)%secondsPerHour)/secondsPerMinute; }
 int32_t timeSecond(timestamp* t) { return absSeconds(t)%secondsPerMinute; }
 
+int64_t timeSince(timestamp* t1, timestamp* t2) {
+	return (absSeconds(t1)*1000000 + t1->nsec/1000) - (absSeconds(t2)*1000000 + t2->nsec/1000);
+}
+
 char* timeFormat(timestamp* t) {
 	char* stamp;
 	if ((stamp = malloc(23+1)) == NULL) return NULL;

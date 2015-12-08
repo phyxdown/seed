@@ -22,6 +22,12 @@ int32_t timeHour(timestamp* t);
 int32_t timeMinute(timestamp* t);
 
 /**
+ * return the time (in us) elapsed from t2 to t1.
+ *
+ * */
+int64_t timeSince(timestamp* t1, timestamp* t2);
+
+/**
  * return a 1991-01-30 12:00:00.990 like timestamp.
  *
  * USAGE
