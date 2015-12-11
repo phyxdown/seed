@@ -30,7 +30,10 @@ buf* bufCat(buf* buffer, const char *add) {
 		else newlen += BUF_MAX_PREALLOC;
 		buf* nbuffer = realloc(buffer, sizeof(struct buf)+ newlen + 1);
 		if (nbuffer == NULL) return buffer;
-		else buffer = nbuffer;
+		else { 
+			if (buffer != nbuffer) free(buffer);
+			buffer = nbuffer;
+		};
 		buffer->free = newlen - buffer->len;
 	}
 	strcpy(&buffer->data[buffer->len], add);
