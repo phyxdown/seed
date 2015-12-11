@@ -90,3 +90,10 @@ NewSimpleBlockingQueue() {
 	m->Release = &seed_concurrent_bq_release;
 	return m;
 }
+
+void 
+FreeSimpleBlockingQueue(cqmthz* q) {
+	seed_concurrent_bq* bq = seed_concurrent_bq_header(q);
+	free(bq->mutex);
+	free(bq);
+}

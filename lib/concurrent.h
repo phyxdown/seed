@@ -10,5 +10,6 @@ typedef struct cqmthz {
 typedef struct cqmthz* ConcurrentQueue;
 
 ConcurrentQueue NewSimpleBlockingQueue();
+void FreeSimpleBlockingQueue(ConcurrentQueue q);
 ConcurrentQueue NewOptimisitcFIFOQueue();
 #endif
