@@ -8,7 +8,5 @@ typedef struct cqmthz {
 } cqmthz;
 
 cqmthz* NewSimpleBlockingQueue();
-void FreeSimpleBlockingQueue(cqmthz* q);
-
 cqmthz* NewOptimisitcFIFOQueue();
 #endif

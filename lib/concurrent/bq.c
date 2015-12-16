@@ -69,7 +69,11 @@ static int seed_concurrent_bq_dequeue(cqmthz *q, void **v) {
 	if (0 != pthread_mutex_unlock(bq->mutex)) return seed_concurrent_bq_status_err_lock;
 	return seed_concurrent_bq_status_ok;
 }
-static void seed_concurrent_bq_release(cqmthz *q) {}
+static void seed_concurrent_bq_release(cqmthz *q) {
+	seed_concurrent_bq* bq = seed_concurrent_bq_header(q);
+	free(bq->mutex);
+	free(bq);
+}
 
 cqmthz*
 NewSimpleBlockingQueue() {
@@ -89,11 +93,4 @@ NewSimpleBlockingQueue() {
 	m->Dequeue = &seed_concurrent_bq_dequeue;
 	m->Release = &seed_concurrent_bq_release;
 	return m;
-}
-
-void 
-FreeSimpleBlockingQueue(cqmthz* q) {
-	seed_concurrent_bq* bq = seed_concurrent_bq_header(q);
-	free(bq->mutex);
-	free(bq);
 }
