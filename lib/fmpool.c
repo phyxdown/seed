@@ -3,6 +3,9 @@
 #define fmpoolFobj(P) \
 	((fobj*)(((char*)(P)) - sizeof(fobj)))
 
+#define CAS(ptr, old, new) \
+	 (__sync_bool_compare_and_swap((ptr), (old), (new)))
+
 fmpool* 
 fmpoolCreate(size_t cap, size_t size) {
 	fmpool* p;
@@ -14,19 +17,23 @@ fmpoolCreate(size_t cap, size_t size) {
 
 void*
 fmpoolAlloc(fmpool* p) {
+	int size = p->size;
+	int cap = p->cap;
+	int count = cap/size;
+	int i, b;
 	fobj* o;
-	int   b = 1;
-	while (b) {
-		p->last += p->size;
-		p->last %= p->cap;
+	for (i = 0; i < count; i++) {
+		p->last += size;
+		p->last %= cap;
 		o = (fobj*)&p->memory[p->last];
 		b = o->busy;
+		if (!b && CAS(&fmpoolFobj(o)->busy, 0, 1))
+			return (void*)&o->memory[0];
 	}
-	o->busy = 1;
-	return (void*)&o->memory[0];
+	return NULL;
 }
 
 void
 fmpoolFree(void* obj) {
-	fmpoolFobj(obj)->busy = 0;
+	CAS(&fmpoolFobj(obj)->busy, 1, 0);
 }
