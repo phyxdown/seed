@@ -70,6 +70,7 @@ static int seed_concurrent_bq_dequeue(cqmthz *q, void **v) {
 	return seed_concurrent_bq_status_ok;
 }
 static void seed_concurrent_bq_release(cqmthz *q) {
+	if (q == NULL) return;
 	seed_concurrent_bq* bq = seed_concurrent_bq_header(q);
 	free(bq->mutex);
 	free(bq);
