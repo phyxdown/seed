@@ -4,14 +4,15 @@
 #include <stdio.h>
 
 typedef struct q1Pointer {
-	unsigned long tag;
-	unsigned long target;
+	int32_t tag;
+	int32_t target;
 } q1Pointer;
 
 
 int main() {
+	printf("%d %d\n", sizeof(struct q1Pointer), sizeof(void*));
 	int *pa = (int*)malloc(4);
-	int i = 2;
+	int i = 1;
 	memcpy(pa, &i, 1);
 
 	printf("%d %p\n", *pa, pa) ;
@@ -23,7 +24,7 @@ int main() {
 		
 		printf("%p\n", p) ;
 		
-		unsigned long t = (unsigned long)p.target;
+		unsigned long t = p.target;
 		printf("%d\n", *((int*)t));
 		printf("%x\n", p.tag);
 	} else {
