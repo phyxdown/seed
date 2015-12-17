@@ -20,15 +20,16 @@ fmpoolAlloc(fmpool* p) {
 	int size = p->size;
 	int cap = p->cap;
 	int count = cap/size;
-	int i, b;
+	int i, b, last;
 	fobj* o;
 	for (i = 0; i < count; i++) {
-		p->last += size;
-		p->last %= cap;
-		o = (fobj*)&p->memory[p->last];
+		last += size;
+		last %= cap;
+		o = (fobj*)&p->memory[last];
 		b = o->busy;
-		if (!b && CAS(&fmpoolFobj(o)->busy, 0, 1))
+		if (!b && CAS(&fmpoolFobj(o)->busy, 0, 1)) {
 			return (void*)&o->memory[0];
+		}
 	}
 	return NULL;
 }

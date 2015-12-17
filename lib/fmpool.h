@@ -23,14 +23,13 @@
 #include <stdlib.h>
 
 typedef struct {
-	int    busy;
-	char   memory[];
+	int busy;
+	char memory[];
 } fobj;
 
 typedef struct {
 	size_t cap;
 	size_t size;
-	size_t last;
 	char   memory[];
 } fmpool;
 
