@@ -8,12 +8,12 @@ typedef struct interface {
 	void (*release)(struct interface *q);
 } interface;
 
-typedef struct interface* seed_concurrent_queue;
+typedef struct interface seed_concurrent_queue;
 #undef interface
 
 /**
  * Create a lock-based queue implements enqueue(), dequeue() and release().
  * */
-seed_concurrent_queue seed_concurrent_lock_based_queue_create();
+seed_concurrent_queue* seed_concurrent_lock_based_queue_create();
 
 #endif
