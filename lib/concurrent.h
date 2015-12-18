@@ -1,14 +1,19 @@
 #ifndef __SEED_CONCURRENT_H
 #define __SEED_CONCURRENT_H
 
-typedef struct cqmthz {
-	int  (*Enqueue)(struct cqmthz *q, void *v);
-	int  (*Dequeue)(struct cqmthz *q, void **v);
-	void (*Release)(struct cqmthz *q);
-} cqmthz;
+#define interface seed_concurrent_queue_methods
+typedef struct interface {
+	int  (*enqueue)(struct interface *q, void *v);
+	int  (*dequeue)(struct interface *q, void **v);
+	void (*release)(struct interface *q);
+} interface;
 
-typedef struct cqmthz* ConcurrentQueue;
+typedef struct interface* seed_concurrent_queue;
+#undef interface
 
-ConcurrentQueue NewSimpleBlockingQueue();
-ConcurrentQueue NewOptimisitcFIFOQueue();
+/**
+ * Create a lock-based queue implements enqueue(), dequeue() and release().
+ * */
+seed_concurrent_queue seed_concurrent_lock_based_queue_create();
+
 #endif
