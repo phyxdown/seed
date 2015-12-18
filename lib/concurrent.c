@@ -108,7 +108,7 @@ static void release(Interface *queue) {
 Interface*
 seed_concurrent_lock_based_queue_create(size_t limit) {
 	Queue* q;
-	if ((q = malloc(sizeof(Queue)+sizeof(struct Interface))) == NULL) {
+	if ((q = malloc(sizeof(Queue)+sizeof(Interface))) == NULL) {
 		return NULL;
 	}
 	if ((q->mutex = (Mutex*)malloc(sizeof(Mutex))) == NULL) {
