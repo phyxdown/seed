@@ -21,7 +21,7 @@ typedef enum   seed_concurrent_lock_based_queue_status seed_concurrent_lock_base
 
 /* header 1*/
 #include "concurrent.h"
-#define interface seed_concurrent_queue_methods
+#define Interface seed_concurrent_queue_methods
 
 /* internal 9*/
 #define Queue  seed_concurrent_lock_based_queue
@@ -59,7 +59,7 @@ enum Status {
 	ERR_UNLOCK = -4, 
 };
 
-static int enqueue(interface *queue, void *value) {
+static int enqueue(Interface *queue, void *value) {
 	Queue* q = itos(queue);
 	if (q == NULL) return ERR_INVALID;
 	Node* nd; nd = (Node*)pool_alloc(q->pool);
@@ -78,7 +78,7 @@ static int enqueue(interface *queue, void *value) {
 	if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
 	return OK;
 }
-static int dequeue(interface *queue, void **value) {
+static int dequeue(Interface *queue, void **value) {
 	Queue* q = itos(queue);
 	if (q == NULL) return ERR_INVALID;
 	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
@@ -98,17 +98,17 @@ static int dequeue(interface *queue, void **value) {
 	if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
 	return OK;
 }
-static void release(interface *queue) {
+static void release(Interface *queue) {
 	if (queue == NULL) return;
 	Queue* q = itos(queue);
 	free(q->mutex);
 	free(q);
 }
 
-interface*
+Interface*
 seed_concurrent_lock_based_queue_create(size_t limit) {
 	Queue* q;
-	if ((q = malloc(sizeof(Queue)+sizeof(struct interface))) == NULL) {
+	if ((q = malloc(sizeof(Queue)+sizeof(struct Interface))) == NULL) {
 		return NULL;
 	}
 	if ((q->mutex = (Mutex*)malloc(sizeof(Mutex))) == NULL) {
@@ -123,7 +123,7 @@ seed_concurrent_lock_based_queue_create(size_t limit) {
 	mutex_init(q->mutex, NULL);
 	q->tail = q->head = NULL;
 
-	interface* m = (interface*)q->methods;
+	Interface* m = (Interface*)q->methods;
 	m->enqueue = &enqueue;
 	m->dequeue = &dequeue;
 	m->release = &release;
@@ -143,7 +143,7 @@ seed_concurrent_lock_based_queue_create(size_t limit) {
 #undef pool_free
 
 /* header 1*/
-#undef interface
+#undef Interface
 
 /* internal 9*/
 #undef Queue

@@ -3,15 +3,15 @@
 
 #include <stdlib.h>
 
-#define interface seed_concurrent_queue_methods
-typedef struct interface {
-	int  (*enqueue)(struct interface *q, void *v);
-	int  (*dequeue)(struct interface *q, void **v);
-	void (*release)(struct interface *q);
-} interface;
+#define Interface seed_concurrent_queue_methods
+typedef struct Interface {
+	int  (*enqueue)(struct Interface *q, void *v);
+	int  (*dequeue)(struct Interface *q, void **v);
+	void (*release)(struct Interface *q);
+} Interface;
 
-typedef struct interface seed_concurrent_queue;
-#undef interface
+typedef struct Interface seed_concurrent_queue;
+#undef Interface
 
 /**
  * Create a lock-based queue implements enqueue(), dequeue() and release().
