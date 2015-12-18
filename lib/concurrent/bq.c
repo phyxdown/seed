@@ -2,7 +2,7 @@
 
 #include <pthread.h>
 
-#include "api.h"
+#include "concurrent.h"
 
 typedef struct seed_concurrent_bq        seed_concurrent_bq;
 typedef struct seed_concurrent_bq_node   seed_concurrent_bq_node;
