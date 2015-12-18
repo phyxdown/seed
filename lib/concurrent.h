@@ -1,6 +1,8 @@
 #ifndef __SEED_CONCURRENT_H
 #define __SEED_CONCURRENT_H
 
+#include <stdlib.h>
+
 #define interface seed_concurrent_queue_methods
 typedef struct interface {
 	int  (*enqueue)(struct interface *q, void *v);
@@ -14,6 +16,6 @@ typedef struct interface seed_concurrent_queue;
 /**
  * Create a lock-based queue implements enqueue(), dequeue() and release().
  * */
-seed_concurrent_queue* seed_concurrent_lock_based_queue_create();
+seed_concurrent_queue* seed_concurrent_lock_based_queue_create(size_t limit);
 
 #endif

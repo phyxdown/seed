@@ -1,24 +1,6 @@
 #ifndef __SEED_FMPOOL_H
 #define __SEED_FMPOOL_H
 
-/**
- * EXAMPLE
- *
- *	typedef struct {
- *		size_t age;
- *		size_t height;
- *	} wife;
- *	
- *	int main() {
- *		fmpool* p = fmpoolCreate(64, sizeof(wife));
- *		wife* w = (wife*)fmpoolAlloc(p);
- *		w->age = 23;
- *		w->height = 169;
- *		printf("My wife is %d year's old.", w->age);
- *		fmpoolFree(w);
- *	}
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 
