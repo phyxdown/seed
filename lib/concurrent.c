@@ -32,7 +32,7 @@ typedef enum   seed_concurrent_lock_based_queue_status seed_concurrent_lock_base
 #define ERR_FULL    seed_concurrent_lock_based_queue_status_err_full
 #define ERR_INVALID seed_concurrent_lock_based_queue_status_err_invalid
 #define ERR_LOCK    seed_concurrent_lock_based_queue_status_err_lock
-#define ERR_UNLOCK    seed_concurrent_lock_based_queue_status_err_unlock
+#define ERR_UNLOCK  seed_concurrent_lock_based_queue_status_err_unlock
 
 #define itos(P) \
 	((Queue*)(((char*)(P)) - sizeof(Queue)))
