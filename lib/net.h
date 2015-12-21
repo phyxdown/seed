@@ -1,6 +1,7 @@
 #ifndef __SEED_NET_H
 #define __SEED_NET_H
 
-int seed_net_GetHostIp(char* ret);
+char* seed_net_hostip();
+char* seed_net_hostipx();
 
 #endif
