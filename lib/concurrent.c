@@ -29,7 +29,7 @@ typedef enum   seed_concurrent_lock_based_queue_status seed_concurrent_lock_base
 #define Status seed_concurrent_lock_based_queue_status
 
 #define OK          seed_concurrent_lock_based_queue_status_ok
-#define ERR_FULL    seed_concurrent_lock_based_queue_status_err_full
+#define FULL        seed_concurrent_lock_based_queue_status_full
 #define ERR_INVALID seed_concurrent_lock_based_queue_status_err_invalid
 #define ERR_LOCK    seed_concurrent_lock_based_queue_status_err_lock
 #define ERR_UNLOCK  seed_concurrent_lock_based_queue_status_err_unlock
@@ -53,17 +53,16 @@ struct Node {
 
 enum Status {
 	OK = 0, 
-	ERR_FULL = -1,
-	ERR_INVALID = -2, 
+	FULL = -1,
+	ERR_INVALID = -2, /* seed does not allow user error */
 	ERR_LOCK = -3, 
 	ERR_UNLOCK = -4, 
 };
 
 static int enqueue(Interface *queue, void *value) {
 	Queue* q = itos(queue);
-	if (q == NULL) return ERR_INVALID;
 	Node* nd; nd = (Node*)pool_alloc(q->pool);
-	if (nd == NULL) return ERR_FULL;
+	if (nd == NULL) return FULL;
 	nd->value = value;
 	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
 	if (q->head == NULL) {
@@ -80,7 +79,6 @@ static int enqueue(Interface *queue, void *value) {
 }
 static int dequeue(Interface *queue, void **value) {
 	Queue* q = itos(queue);
-	if (q == NULL) return ERR_INVALID;
 	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
 	if (q->tail == NULL) {
 		*value = NULL;
@@ -99,7 +97,6 @@ static int dequeue(Interface *queue, void **value) {
 	return OK;
 }
 static void release(Interface *queue) {
-	if (queue == NULL) return;
 	Queue* q = itos(queue);
 	free(q->mutex);
 	free(q);
@@ -150,7 +147,7 @@ seed_concurrent_lock_based_queue_create(size_t limit) {
 #undef Node
 #undef Status
 #undef OK
-#undef ERR_FULL
+#undef FULL
 #undef ERR_INVALID
 #undef ERR_LOCK
 #undef ERR_UNLOCK
