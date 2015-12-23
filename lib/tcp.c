@@ -4,7 +4,7 @@
 #include <arpa/inet.h>
 #include "tcp.h"
 
-int tcpDial(const char *host, int port) {
+int seed_tcp_dial(const char *host, int port) {
 	int    sockfd;
 	struct sockaddr_in servaddr;
 
@@ -22,14 +22,18 @@ int tcpDial(const char *host, int port) {
 	return sockfd;
 }
 
-void tcpClose(int sockfd) {
+void seed_tcp_close(int sockfd) {
 	close(sockfd);
 }
 
-size_t tcpWrite(int sockfd, char *buffer, size_t length) {
+size_t seed_tcp_write(int sockfd, char *buffer, size_t length) {
 	return write(sockfd, buffer, length);
 }
 
-size_t tcpRead(int sockfd, char *buffer, size_t length) {
+size_t seed_tcp_read(int sockfd, char *buffer, size_t length) {
 	return read(sockfd, buffer, length);
+}
+
+int main() {
+	close(-1);
 }
