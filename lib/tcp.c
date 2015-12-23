@@ -33,7 +33,3 @@ size_t seed_tcp_write(int sockfd, char *buffer, size_t length) {
 size_t seed_tcp_read(int sockfd, char *buffer, size_t length) {
 	return read(sockfd, buffer, length);
 }
-
-int main() {
-	close(-1);
-}
