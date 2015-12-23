@@ -26,8 +26,8 @@ void seed_tcp_close(int sockfd) {
 	close(sockfd);
 }
 
-size_t seed_tcp_write(int sockfd, char *buffer, size_t length) {
-	size_t n, t = 0;
+int seed_tcp_write(int sockfd, char *buffer, int length) {
+	ssize_t n, t = 0;
 	while (t != length) {
 		n = write(sockfd, buffer, length - t);
 		if (n == 0) return t;
@@ -38,8 +38,8 @@ size_t seed_tcp_write(int sockfd, char *buffer, size_t length) {
 	return t;
 }
 
-size_t seed_tcp_read(int sockfd, char *buffer, size_t length) {
-	size_t n, t = 0;
+int seed_tcp_read(int sockfd, char *buffer, int length) {
+	ssize_t n, t = 0;
 	while (t != length) {
 		n = read(sockfd, buffer, length -t);
 		if (n == 0) return t;
