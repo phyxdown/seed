@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "defs.h"
+#include "attribute.h"
 
 typedef struct buf {
 	size_t len;

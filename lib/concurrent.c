@@ -1,9 +1,5 @@
 #include <stdlib.h>
 
-typedef struct seed_concurrent_lock_based_queue        seed_concurrent_lock_based_queue;
-typedef struct seed_concurrent_lock_based_queue_node   seed_concurrent_lock_based_queue_node;
-typedef enum   seed_concurrent_lock_based_queue_status seed_concurrent_lock_based_queue_status;
-
 /* 3rd party 4*/
 #include <pthread.h>
 #define Mutex pthread_mutex_t
@@ -21,7 +17,7 @@ typedef enum   seed_concurrent_lock_based_queue_status seed_concurrent_lock_base
 
 /* header 1*/
 #include "concurrent.h"
-#define Interface seed_concurrent_queue_methods
+#define Interface seed_concurrent_queue
 
 /* internal 9*/
 #define Queue  seed_concurrent_lock_based_queue
@@ -36,6 +32,10 @@ typedef enum   seed_concurrent_lock_based_queue_status seed_concurrent_lock_base
 
 #define itos(P) \
 	((Queue*)(((char*)(P)) - sizeof(Queue)))
+
+typedef struct Queue  Queue;
+typedef struct Node   Node;
+typedef enum   Status Status;
 
 struct Queue {
 	Node *tail; 
