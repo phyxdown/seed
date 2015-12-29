@@ -102,7 +102,8 @@ static int batch_dequeue(Interface *queue, void **value, int length) {
 	if (q->tail != NULL) {
 		int i;
 		for (i = 0; i < length; i++) {
-			(*value)++ = q->tail->value;
+			*value = q->tail->value;
+			*value = *value + 1;
 			if (q->tail->prev == NULL) {
 				pool_free(q->tail);
 				q->head = q->tail = NULL;
