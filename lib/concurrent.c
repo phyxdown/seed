@@ -97,7 +97,28 @@ static int dequeue(Interface *queue, void **value) {
 }
 
 static int batch_dequeue(Interface *queue, void **value, int length) {
-	return l;
+	Queue* q = itos(queue);
+	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
+	if (q->tail != NULL) {
+		int i;
+		for (i = 0; i < length; i++) {
+			(*value)++ = q->tail->value;
+			if (q->tail->prev == NULL) {
+				pool_free(q->tail);
+				q->head = q->tail = NULL;
+				i++;
+				break;
+			} else {
+				q->tail = q->tail->prev;
+				pool_free(q->tail->next);
+				q->tail->next = NULL;
+			}
+		}
+		if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
+		return i;
+	}
+	if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
+	return 0;
 }
 
 static void release(Interface *queue) {
