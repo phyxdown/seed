@@ -30,6 +30,5 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([gettimeofday])
 
 AC_CONFIG_FILES([Makefile
-                 lib/Makefile
-                 src/Makefile])
+                 lib/Makefile])
 AC_OUTPUT
