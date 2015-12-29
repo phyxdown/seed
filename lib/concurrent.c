@@ -1,11 +1,12 @@
 #include <stdlib.h>
 
-/* 3rd party 4*/
+/* 3rd party 5*/
 #include <pthread.h>
 #define Mutex pthread_mutex_t
-#define mutex_init   pthread_mutex_init
-#define mutex_lock   pthread_mutex_lock
-#define mutex_unlock pthread_mutex_unlock
+#define mutex_init    pthread_mutex_init
+#define mutex_release free
+#define mutex_lock    pthread_mutex_lock
+#define mutex_unlock  pthread_mutex_unlock
 
 /* seed 5*/
 #include "fmpool.h"
@@ -52,17 +53,14 @@ struct Node {
 };
 
 enum Status {
-	OK = 0, 
-	FULL = -1,
-	ERR_INVALID = -2, /* seed does not allow user error */
-	ERR_LOCK = -3, 
-	ERR_UNLOCK = -4, 
+	ERR_LOCK = -1, 
+	ERR_UNLOCK = -2, 
 };
 
 static int enqueue(Interface *queue, void *value) {
 	Queue* q = itos(queue);
 	Node* nd; nd = (Node*)pool_alloc(q->pool);
-	if (nd == NULL) return FULL;
+	if (nd == NULL) return 0;
 	nd->value = value;
 	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
 	if (q->head == NULL) {
@@ -75,14 +73,13 @@ static int enqueue(Interface *queue, void *value) {
 		q->head = nd;
 	}
 	if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
-	return OK;
+	return 1;
 }
+
 static int dequeue(Interface *queue, void **value) {
 	Queue* q = itos(queue);
 	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
-	if (q->tail == NULL) {
-		*value = NULL;
-	} else {
+	if (q->tail != NULL) {
 		*value = q->tail->value;
 		if (q->tail->prev == NULL) {
 			pool_free(q->tail);
@@ -92,13 +89,21 @@ static int dequeue(Interface *queue, void **value) {
 			pool_free(q->tail->next);
 			q->tail->next = NULL;
 		}
+		if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
+		return 1;
 	}
 	if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
-	return OK;
+	return 0;
 }
+
+static int batch_dequeue(Interface *queue, void **value, int length) {
+	return l;
+}
+
 static void release(Interface *queue) {
 	Queue* q = itos(queue);
-	free(q->mutex);
+	mutex_release(q->mutex);
+	pool_release(q->pool);
 	free(q);
 }
 
@@ -113,22 +118,24 @@ seed_concurrent_lock_based_queue_create(size_t limit) {
 		return NULL;
 	}
 	if ((q->pool = pool_create(limit, sizeof(Node))) == NULL) {
+		mutex_release(q->mutex);
 		free(q);
-		free(q->mutex);
 		return NULL;
 	}
 	mutex_init(q->mutex, NULL);
 	q->tail = q->head = NULL;
 
 	Interface* m = (Interface*)q->methods;
-	m->enqueue = &enqueue;
-	m->dequeue = &dequeue;
-	m->release = &release;
+	m->enqueue       = &enqueue;
+	m->dequeue       = &dequeue;
+	m->batch_dequeue = &batch_dequeue;
+	m->release       = &release;
 	return m;
 }
-/* 3rd party 4*/
+/* 3rd party 5*/
 #undef Mutex
 #undef mutex_init
+#undef mutex_release
 #undef mutex_lock
 #undef mutex_unlock
 
