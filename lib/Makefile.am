@@ -8,6 +8,6 @@ libseed_la_SOURCES = attribute.h attribute.c \
 		     list.c list.h \
 		     net.c net.h \
 		     tcp.c tcp.h \
-		     threadlocal.c threadlocal.h
-		     time.c time.h \
+		     threadlocal.c threadlocal.h \
+		     time.c time.h 
 seedinc_HEADERS =  attribute.h buf.h concurrent.h fmpool.h list.h net.h tcp.h threadlocal.h time.h
