@@ -8,8 +8,10 @@ struct seed_aggregator {
 	void (*release) (seed_aggregator* agg);
 };
 
-typedef void seed_aggregator_handler(void* args);
+typedef int seed_aggregator_handler(void* args);
+typedef void seed_aggregator_releaser(void* args);
 
-seed_aggregator* seed_aggregator_create(seed_aggregator_handler* handler);
+seed_aggregator* seed_aggregator_create(seed_aggregator_handler* handler, 
+		seed_aggregator_releaser* releaser, int bufferSize);
 
 #endif
