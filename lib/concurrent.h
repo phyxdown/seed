@@ -6,7 +6,7 @@
 /**
  * Example 
  * seed_concurrent_queue* q;
- * q = seed_concurrent_lock_based_queue_create(1000);
+ * q = seed_concurrent_queue_create(1000);
  *
  * char* a = (char*)malloc(4);
  * int r = q->enqueue(q, a);
