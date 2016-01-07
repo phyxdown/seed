@@ -147,10 +147,10 @@ seed_concurrent_queue_create(size_t limit) {
 	q->tail = q->head = NULL;
 
 	Interface* m = (Interface*)q->methods;
-	m->enqueue       = &enqueue;
-	m->dequeue       = &dequeue;
+	m->enqueue      = &enqueue;
+	m->dequeue      = &dequeue;
 	m->batchDequeue = &batchDequeue;
-	m->release       = &release;
+	m->release      = &release;
 	return m;
 }
 /* 3rd party 5*/
