@@ -39,18 +39,15 @@
  *
  * */
 
-typedef struct seed_concurrent_queue_methods seed_concurrent_queue;
+typedef struct seed_concurrent_queue seed_concurrent_queue;
 
-struct seed_concurrent_queue_methods {
-	int  (*enqueue)       (struct seed_concurrent_queue_methods *q, void *v);
-	int  (*dequeue)       (struct seed_concurrent_queue_methods *q, void **v);
-	int  (*batch_dequeue) (struct seed_concurrent_queue_methods *q, void **v, int l);
-	void (*release)       (struct seed_concurrent_queue_methods *q);
+struct seed_concurrent_queue {
+	int  (*enqueue)      (seed_concurrent_queue* q, void *v);
+	int  (*dequeue)      (seed_concurrent_queue* q, void **v);
+	int  (*batchDequeue) (seed_concurrent_queue* q, void **v, int l);
+	void (*release)      (seed_concurrent_queue* q);
 };
 
-/**
- * Create a lock-based queue implements enqueue(), dequeue() and release().
- * */
-seed_concurrent_queue* seed_concurrent_lock_based_queue_create(size_t limit);
+seed_concurrent_queue* seed_concurrent_queue_create(size_t limit);
 
 #endif

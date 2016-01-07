@@ -21,15 +21,15 @@
 #define Interface seed_concurrent_queue
 
 /* internal 9*/
-#define Queue  seed_concurrent_lock_based_queue
-#define Node   seed_concurrent_lock_based_queue_node
-#define Status seed_concurrent_lock_based_queue_status
+#define Queue  _seed_concurrent_queue
+#define Node   _seed_concurrent_queue_node
+#define Status _seed_concurrent_queue_status
 
-#define OK          seed_concurrent_lock_based_queue_status_ok
-#define FULL        seed_concurrent_lock_based_queue_status_full
-#define ERR_INVALID seed_concurrent_lock_based_queue_status_err_invalid
-#define ERR_LOCK    seed_concurrent_lock_based_queue_status_err_lock
-#define ERR_UNLOCK  seed_concurrent_lock_based_queue_status_err_unlock
+#define OK          _seed_concurrent_queue_status_ok
+#define FULL        _seed_concurrent_queue_status_full
+#define ERR_INVALID _seed_concurrent_queue_status_err_invalid
+#define ERR_LOCK    _seed_concurrent_queue_status_err_lock
+#define ERR_UNLOCK  _seed_concurrent_queue_status_err_unlock
 
 #define itos(P) \
 	((Queue*)(((char*)(P)) - sizeof(Queue)))
@@ -96,7 +96,7 @@ static int dequeue(Interface *queue, void **value) {
 	return 0;
 }
 
-static int batch_dequeue(Interface *queue, void **value, int length) {
+static int batchDequeue(Interface *queue, void **value, int length) {
 	Queue* q = itos(queue);
 	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
 	if (q->tail != NULL) {
@@ -129,7 +129,7 @@ static void release(Interface *queue) {
 }
 
 Interface*
-seed_concurrent_lock_based_queue_create(size_t limit) {
+seed_concurrent_queue_create(size_t limit) {
 	Queue* q;
 	if ((q = malloc(sizeof(Queue)+sizeof(Interface))) == NULL) {
 		return NULL;
@@ -149,7 +149,7 @@ seed_concurrent_lock_based_queue_create(size_t limit) {
 	Interface* m = (Interface*)q->methods;
 	m->enqueue       = &enqueue;
 	m->dequeue       = &dequeue;
-	m->batch_dequeue = &batch_dequeue;
+	m->batchDequeue = &batchDequeue;
 	m->release       = &release;
 	return m;
 }
