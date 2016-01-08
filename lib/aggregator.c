@@ -18,59 +18,61 @@
 #define IAggregator       seed_aggregator
 #define IAggregatorCreate seed_aggregator_create
 #define FHandler          seed_aggregator_handler
-#define FReleaser         seed_aggregator_releaser
 
 /* internal %d */
 #define Aggregator _seed_aggregator
 #define itos(P) \
 	((Aggregator*)(((char*)(P)) - sizeof(Aggregator)))
+#define WORKING 2
+#define CLOSING 1
+#define CLOSED  0
 
 typedef struct Aggregator Aggregator;
 
 struct Aggregator {
-	FHandler*  handler;
-	FReleaser* releaser;
-	IQueue*    queue;
-	Thread     thread;
-	void*      methods[];
+	FHandler*    handler;
+	IQueue*      queue;
+	Thread       thread;
+	volatile int status;
+	void*        methods[];
 };
 
-static void add(IAggregator* aggregator, void* item) {
+static int add(IAggregator* aggregator, void* item) {
 	Aggregator* a = itos(aggregator);
+	if (a->status != WORKING) return 0;
 	IQueue* q = a->queue;
-	int r = q->enqueue(q, item);
-	if (r < 0);
-	if (r == 0) a->releaser(item);
-	if (r == 1);
+	return q->enqueue(q, item);
 }
+
 static void release(IAggregator* agg) {}
 
-static void* collector(void* arg) {
-	Aggregator* agg      = (Aggregator*)arg;
-	IAggregator* methods = (IAggregator*)agg->methods;
-	IQueue* queue        = agg->queue;
-	FHandler* handler    = agg->handler;
-	FReleaser* releaser  = agg->releaser;
-
-	while(1) {
-		void *b[1000];
-		int r = queue->batchDequeue(queue, b, 1000);
-		if (r < 0);
-		if (r == 0) continue;
-		int i;
-		int seconds = 0;
-		for (i = 0; i < r; i++) {
-			if (handler(b[i]) < 0) { 
-				methods->add(methods, b[i]);
-				seconds = seconds + (seconds < 4);
-				sleep(seconds);
-			} else releaser(b[i]);
+static void collect_and_handle(Aggregator* agg) {
+	Aggregator* a = agg;
+	IAggregator* m = (IAggregator*)a->methods;
+	IQueue* q = a->queue;
+	FHandler* h = a->handler;
+	void *b[1000];
+	int r = q->batchDequeue(q, b, 1000);
+	if (r < 0); if (r == 0);
+	int i;
+	int s = 0;
+	for (i = 0; i < r; i++) {
+		if (h(b[i]) < 0) { 
+			m->add(m, b[i]);
+			s = s + (s < 4);
+			sleep(s);
 		}
 	}
+}
+
+static void* collector(void* arg) {
+	Aggregator* a = (Aggregator*)arg;
+	while(a->status == WORKING) collect_and_handle(a);
+	collect_and_handle(a);
 	return NULL;
 }
 
-IAggregator* IAggregatorCreate(FHandler handler, FReleaser releaser, int bufferSize) {
+IAggregator* IAggregatorCreate(FHandler handler, int bufferSize) {
 	Aggregator* agg;
 	if (!(agg = malloc(sizeof(Aggregator) + sizeof(IAggregator)))) return NULL;
 	if (!(agg->queue = IQueueCreate(bufferSize))) {
@@ -78,7 +80,6 @@ IAggregator* IAggregatorCreate(FHandler handler, FReleaser releaser, int bufferS
 		return NULL;
 	}
 	agg->handler  = handler;
-	agg->releaser = releaser;
 
 	IAggregator* m = (IAggregator*)agg->methods;
 	m->add     = &add;
@@ -89,5 +90,6 @@ IAggregator* IAggregatorCreate(FHandler handler, FReleaser releaser, int bufferS
 		free(agg);
 		return NULL;
 	}
+	agg->status = WORKING;
 	return m;
 }
