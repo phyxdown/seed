@@ -83,23 +83,45 @@ static void* collector(void* arg) {
 }
 
 IAggregator* IAggregatorCreate(FHandler handler) {
-	Aggregator* agg;
-	if (!(agg = malloc(sizeof(Aggregator) + sizeof(IAggregator)))) return NULL;
-	if (!(agg->queue = IQueueCreate(BUFFER_SIZE))) {
-		free(agg);
+	Aggregator* a;
+	if (!(a = malloc(sizeof(Aggregator) + sizeof(IAggregator)))) return NULL;
+	if (!(a->queue = IQueueCreate(BUFFER_SIZE))) {
+		free(a);
 		return NULL;
 	}
-	agg->handler  = handler;
+	a->handler  = handler;
 
-	IAggregator* m = (IAggregator*)agg->methods;
+	IAggregator* m = (IAggregator*)a->methods;
 	m->add     = &add;
 	m->release = &release;
 
-	if ((thread_create(&agg->thread, NULL, &collector, agg)) < 0) {
-		agg->queue->release(agg->queue);
-		free(agg);
+	if ((thread_create(&a->thread, NULL, &collector, a)) < 0) {
+		a->queue->release(a->queue);
+		free(a);
 		return NULL;
 	}
-	agg->status = WORKING;
+	a->status = WORKING;
 	return m;
 }
+
+/* thread lib 3 */
+#undef Thread
+#undef thread_create
+#undef thread_join
+
+/* queue lib 2 */
+#undef IQueue
+#undef IQueueCreate
+
+/* header 3 */
+#undef IAggregator
+#undef IAggregatorCreate
+#undef FHandler
+
+/* internal 6 */
+#undef Aggregator
+#undef itos
+#undef WORKING
+#undef CLOSING
+#undef CLOSED
+#undef BUFFER_SIZE
