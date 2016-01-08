@@ -44,7 +44,7 @@ typedef struct seed_concurrent_queue seed_concurrent_queue;
 struct seed_concurrent_queue {
 	int  (*enqueue)      (seed_concurrent_queue* q, void *v);
 	int  (*dequeue)      (seed_concurrent_queue* q, void **v);
-	int  (*batchDequeue) (seed_concurrent_queue* q, void **v, int l);
+	int  (*batchDequeue) (seed_concurrent_queue* q, void **v, size_t l);
 	void (*release)      (seed_concurrent_queue* q);
 };
 

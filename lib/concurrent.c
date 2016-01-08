@@ -96,7 +96,7 @@ static int dequeue(Interface *queue, void **value) {
 	return 0;
 }
 
-static int batchDequeue(Interface *queue, void **value, int length) {
+static int batchDequeue(Interface *queue, void **value, size_t length) {
 	Queue* q = itos(queue);
 	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
 	if (q->tail != NULL) {
