@@ -44,7 +44,14 @@ static int add(IAggregator* aggregator, void* item) {
 	return q->enqueue(q, item);
 }
 
-static void release(IAggregator* agg) {}
+static void release(IAggregator* aggregator) {
+	Aggregator* a = itos(aggregator);
+	a->status = CLOSING;
+	thread_join(a->thread, NULL);
+	a->queue->release(a->queue);
+	a->status = CLOSED;
+	free(a);
+}
 
 static void collect_and_handle(Aggregator* agg) {
 	Aggregator* a = agg;

@@ -1,7 +1,8 @@
 seedincdir = $(includedir)/seed
 
 lib_LTLIBRARIES = libseed.la
-libseed_la_SOURCES = attribute.h attribute.c \
+libseed_la_SOURCES = attribute.c attribute.h \
+		     aggregator.c aggregator.h \
 		     buf.c buf.h \
 		     concurrent.c concurrent.h \
 		     fmpool.c fmpool.h \

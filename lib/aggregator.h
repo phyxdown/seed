@@ -4,11 +4,11 @@
 typedef struct seed_aggregator seed_aggregator;
 
 struct seed_aggregator {
-	int (*add) (seed_aggregator* agg, void* args);
-	void (*release) (seed_aggregator* agg);
+	int (*add) (seed_aggregator* aggregator, void* item);
+	void (*release) (seed_aggregator* aggregator);
 };
 
-typedef int seed_aggregator_handler(void* args);
+typedef int seed_aggregator_handler(void* item);
 
 seed_aggregator* seed_aggregator_create(seed_aggregator_handler* handler, int bufferSize);
 
