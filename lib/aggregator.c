@@ -1,10 +1,10 @@
-/* pthread lib %d */
+/* thread lib 3 */
 #include <pthread.h>
 #define Thread        pthread_t
 #define thread_create pthread_create
 #define thread_join   pthread_join
 
-/* queue lib %d */
+/* queue lib 2 */
 #include "concurrent.h"
 #define IQueueCreate seed_concurrent_queue_create
 #define IQueue       seed_concurrent_queue
@@ -19,7 +19,7 @@
 #define IAggregatorCreate seed_aggregator_create
 #define FHandler          seed_aggregator_handler
 
-/* internal %d */
+/* internal 5 */
 #define Aggregator _seed_aggregator
 #define itos(P) \
 	((Aggregator*)(((char*)(P)) - sizeof(Aggregator)))

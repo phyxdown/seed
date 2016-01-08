@@ -41,3 +41,6 @@ void
 fmpoolFree(void* obj) {
 	CAS(&(fmpoolFobj(obj)->busy), 1, 0);
 }
+
+#undef fmpoolFobj
+#undef CAS
