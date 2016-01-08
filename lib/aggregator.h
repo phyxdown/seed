@@ -10,6 +10,6 @@ struct seed_aggregator {
 
 typedef int seed_aggregator_handler(void* item);
 
-seed_aggregator* seed_aggregator_create(seed_aggregator_handler* handler, int bufferSize);
+seed_aggregator* seed_aggregator_create(seed_aggregator_handler* handler);
 
 #endif

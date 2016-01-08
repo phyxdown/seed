@@ -19,13 +19,16 @@
 #define IAggregatorCreate seed_aggregator_create
 #define FHandler          seed_aggregator_handler
 
-/* internal 5 */
+/* internal 6 */
 #define Aggregator _seed_aggregator
 #define itos(P) \
 	((Aggregator*)(((char*)(P)) - sizeof(Aggregator)))
+
 #define WORKING 2
 #define CLOSING 1
 #define CLOSED  0
+
+#define BUFFER_SIZE 1000
 
 typedef struct Aggregator Aggregator;
 
@@ -58,8 +61,8 @@ static void collect_and_handle(Aggregator* agg) {
 	IAggregator* m = (IAggregator*)a->methods;
 	IQueue* q = a->queue;
 	FHandler* h = a->handler;
-	void *b[1000];
-	int r = q->batchDequeue(q, b, 1000);
+	void *b[BUFFER_SIZE];
+	int r = q->batchDequeue(q, b, BUFFER_SIZE);
 	if (r < 0); if (r == 0);
 	int i;
 	int s = 0;
@@ -79,10 +82,10 @@ static void* collector(void* arg) {
 	return NULL;
 }
 
-IAggregator* IAggregatorCreate(FHandler handler, int bufferSize) {
+IAggregator* IAggregatorCreate(FHandler handler) {
 	Aggregator* agg;
 	if (!(agg = malloc(sizeof(Aggregator) + sizeof(IAggregator)))) return NULL;
-	if (!(agg->queue = IQueueCreate(bufferSize))) {
+	if (!(agg->queue = IQueueCreate(BUFFER_SIZE))) {
 		free(agg);
 		return NULL;
 	}
