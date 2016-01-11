@@ -1,58 +1,52 @@
-/* time.c */
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
 
 #include "time.h"
 
-typedef int Month;
-typedef int Weekday;
-
-timestamp* timeNow() {
-	timestamp* t;
-	t = malloc(sizeof(*t));
+#ifdef __GNUC__
+#include <sys/time.h>
+seed_time* seed_time_now(int tz) {
+	seed_time* t;
+	if ((t = malloc(sizeof(*t))) == NULL) return NULL;
 	struct timeval tv;
-	struct timezone tz;
-	gettimeofday(&tv, &tz);
+	gettimeofday(&tv, NULL);
 	t->sec = tv.tv_sec;
 	t->nsec = tv.tv_usec * 1000;
-	t->offset = tz.tz_minuteswest;
+	t->offset = -tz * 60;
 	return t;
 }
+#endif
 
-void timeRelease(timestamp* t) {
-	if (t == NULL) return;
-	free(t);
+void seed_time_release(seed_time* t) {
+	if (t != NULL) free(t);
 }
 
-int timeAfter(timestamp* t, timestamp* u) { return t->sec > u->sec || ((t->sec == u->sec) && t->nsec > u->nsec); }
-int timeBefore(timestamp* t, timestamp* u) { return t->sec < u->sec || ((t->sec == u->sec) && t->nsec < u->nsec); }
-int timeEqual(timestamp* t, timestamp* u) { return t->sec == u->sec && t->nsec == u->nsec; }
+int seed_time_after(seed_time* t, seed_time* u) { return t->sec > u->sec || ((t->sec == u->sec) && t->nsec > u->nsec); }
+int seed_time_before(seed_time* t, seed_time* u) { return t->sec < u->sec || ((t->sec == u->sec) && t->nsec < u->nsec); }
+int seed_time_equal(seed_time* t, seed_time* u) { return t->sec == u->sec && t->nsec == u->nsec; }
 
-typedef struct {
+typedef struct ymd {
 	int32_t year;
 	int32_t month;
 	int32_t day;
 } ymd;
 
-const int secondsPerMinute = 60,
-      secondsPerHour = 3600,
-      secondsPerDay = 86400,
-      secondsPerWeek = 604800,
-      daysPer400Years = 365*400 + 97,
-      daysPer100Years = 365*100 + 24,
-      daysPer4Years = 365*4 + 1;
+static const int secondsPerMinute = 60,
+	     secondsPerHour = 3600, 
+	     secondsPerDay = 86400, 
+	     secondsPerWeek = 604800, 
+	     daysPer400Years = 365*400 + 97, 
+	     daysPer100Years = 365*100 + 24, 
+	     daysPer4Years = 365*4 + 1;
 
-const int64_t absoluteZeroYear = 1;
-const int internalYear = 1;
-const int unixYear = 1970;
+static const int64_t absoluteZeroYear = 1;
+static const int internalYear = 1;
+static const int unixYear = 1970;
 
-const int64_t absoluteToInternal = 0,
-      internalToAbsolute = 0,
-                           
-      unixToInternal = 62135596800,
-      internalToUnix = -62135596800;
+static const int64_t absoluteToInternal = 0,
+	     internalToAbsolute = 0, 
+	     unixToInternal = 62135596800, 
+	     internalToUnix = -62135596800;
 
 static int32_t daysBefore[] = {
 	0,
@@ -70,12 +64,12 @@ static int32_t daysBefore[] = {
 	31 + 28 + 31 + 30 + 31 + 30 + 31 + 31 + 30 + 31 + 30 + 31
 };
 
-static int64_t absSeconds(timestamp* t) { return t->sec + unixToInternal + absoluteZeroYear - t->offset*60; }
+static int64_t absolute_seconds(seed_time* t) { return t->sec + unixToInternal + absoluteZeroYear - t->offset*60; }
 
-static int isLeap(int32_t year) { return year%4 == 0 && (year%100 !=0 || year%400 == 0); }
+static int is_leap(int32_t year) { return year%4 == 0 && (year%100 !=0 || year%400 == 0); }
 
-static ymd* absDate(timestamp* t, int full) {
-	int64_t abs = absSeconds(t);
+static ymd* absDate(seed_time* t, int full) {
+	int64_t abs = absolute_seconds(t);
 	int64_t d, n, y;
 
 	ymd* ymd;
@@ -107,7 +101,7 @@ static ymd* absDate(timestamp* t, int full) {
 
 	day = yday;
 
-	if (isLeap(year)) {
+	if (is_leap(year)) {
 		if (day == 31 + 29 -1) {
 			ymd->month = 2;
 			ymd->day = 29;
@@ -117,7 +111,7 @@ static ymd* absDate(timestamp* t, int full) {
 		}
 	}
 
-	month = (Month)(day/31);
+	month = (int)(day/31);
 	end = daysBefore[month+1];
 	if (day >= end) {
 		month++;
@@ -131,23 +125,54 @@ static ymd* absDate(timestamp* t, int full) {
 	return ymd;
 }
 
-int32_t timeHour(timestamp* t) { return (absSeconds(t)%secondsPerDay)/secondsPerHour; }
-int32_t timeMinute(timestamp* t) { return (absSeconds(t)%secondsPerHour)/secondsPerMinute; }
-int32_t timeSecond(timestamp* t) { return absSeconds(t)%secondsPerMinute; }
+int32_t seed_time_hour(seed_time* t) { return (absolute_seconds(t)%secondsPerDay)/secondsPerHour; }
+int32_t seed_time_minute(seed_time* t) { return (absolute_seconds(t)%secondsPerHour)/secondsPerMinute; }
+int32_t seed_time_second(seed_time* t) { return absolute_seconds(t)%secondsPerMinute; }
 
-int64_t timeSince(timestamp* t1, timestamp* t2) {
-	return (absSeconds(t1)*1000000 + t1->nsec/1000) - (absSeconds(t2)*1000000 + t2->nsec/1000);
+int64_t seed_time_since(seed_time* t1, seed_time* t2) { 
+	return (absolute_seconds(t1)*1000000 + t1->nsec/1000) - (absolute_seconds(t2)*1000000 + t2->nsec/1000);
 }
 
-char* timeFormat(timestamp* t) {
+char* seed_time_format(seed_time* t) {
 	char* stamp;
 	if ((stamp = malloc(23+1)) == NULL) return NULL;
-	ymd* ymd = absDate(t, 1);
-	sprintf(stamp, "%04d-%02d-%02d %02d:%02d:%02d.%03d", ymd->year, ymd->month, ymd->day, timeHour(t), timeMinute(t), timeSecond(t), t->nsec/1000000);
+	ymd* ymd;
+	if ((ymd = absDate(t, 1)) == NULL) { 
+		free(stamp);
+		return NULL;
+	}
+	sprintf(stamp, "%04d-%02d-%02d %02d:%02d:%02d.%03d", ymd->year, ymd->month, ymd->day,
+			seed_time_hour(t), seed_time_minute(t), seed_time_second(t), t->nsec/1000000);
 	free(ymd);
+	*(stamp+23) = '\0';
 	return stamp;
 }
 
-int32_t timeUnixHourage(timestamp* t) {
+int32_t seed_time_hourage(seed_time* t) {
 	return t->sec/secondsPerHour;
 }
+
+#ifdef SEED_TIME_TEST
+static void test_seed_time_now() {
+  	int32_t h;
+  	seed_time* t = seed_time_now(8);
+  	if (!!t) h = seed_time_hourage(t);
+  	free(t);
+  	printf("%d\n", h);
+}
+
+static void test_seed_time_hourage() {
+  	seed_time* t = seed_time_now(8);
+  	if (!!t) {
+  		char* ts = seed_time_format(t);
+  		if (!!ts) printf("%s\n", ts);
+  		free(ts);
+  	}
+  	free(t);
+}
+
+int main() {
+	test_seed_time_now();
+	test_seed_time_hourage();
+}
+#endif

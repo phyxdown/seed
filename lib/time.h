@@ -3,56 +3,53 @@
 
 #include <stdint.h>
 
-typedef struct timestamp {
-	int64_t sec;    /* sec gives the number of seconds eclapsed since 1-1-1 00:00:00 */
-	int32_t nsec;   /* nanoseconds [0, 999999999] */
+typedef struct seed_time seed_time;
+
+struct seed_time {
+	int64_t sec;
+	int32_t nsec;
 	int16_t offset;
-} timestamp;
+};
 
-typedef timestamp* Time;
+seed_time* seed_time_now(int tz);
+void seed_time_release(seed_time* t);
 
-timestamp* timeNow();
-void timeRelease(timestamp* t);
+int seed_time_after(seed_time* t, seed_time* u);
+int seed_time_before(seed_time* t, seed_time* u);
+int seed_time_equal(seed_time* t, seed_time* u);
 
-int timeAfter(timestamp* t, timestamp* u);
-int timeBefore(timestamp* t, timestamp* u);
-int timeEqual(timestamp* t, timestamp* u);
-
-int32_t timeHour(timestamp* t);
-int32_t timeMinute(timestamp* t);
+int32_t seed_time_hour(seed_time* t);
+int32_t seed_time_minute(seed_time* t);
+int32_t seed_time_second(seed_time* t);
 
 /**
  * return the time (in us) elapsed from t2 to t1.
- *
  * */
-int64_t timeSince(timestamp* t1, timestamp* t2);
+int64_t seed_time_since(seed_time* t1, seed_time* t2);
 
 /**
  * return a 1991-01-30 12:00:00.990 like timestamp.
  *
  * USAGE
  *
- * 	Time tm_now = timeNow();
- * 	char* ts_now = timeFormat(tm_now);
- *
- * 	dosomething(ts_now);
- *
- * 	free(ts_now);
- * 	free(tm_now);
+ * 	seed_time* t = seed_time_now(8);
+ * 	if (!!t) {
+ * 		char* ts = seed_time_format(t);
+ * 		if (!!ts) dosomething(ts);
+ * 		free(ts);
+ * 	}
+ * 	free(t);
  * */
-char* timeFormat(timestamp* t);
+char* seed_time_format(seed_time* t);
 
 /**
- *
  * USAGE
  *
- * 	int32_t hourage;
- * 	Time tm_now = timeNow();
- * 	hourage = timeUnixHourage(ts_now);
- * 	free(tm_now);
- *
- * 	dosomething(hourage);
+ * 	int32_t h;
+ * 	seed_time* t = seed_time_now(8);
+ * 	if (!!t) h = seed_time_hourage(t);
+ * 	free(t);
+ * 	dosomething(h);
  * */
-
-int32_t timeUnixHourage(timestamp* t);
+int32_t seed_time_hourage(seed_time* t);
 #endif
