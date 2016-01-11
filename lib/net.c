@@ -3,7 +3,13 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/socket.h>
+
+#ifndef __USE_MISC
+#define __USE_MISC
+#endif
 #include <net/if.h>
+#undef __USE_MISC
+
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
 
@@ -29,7 +35,8 @@ int seed_net_hostip(char** pp) {
 			ifreq++;
 			continue;
 		}
-		*pp = strdup(ip);
+		*pp = malloc(strlen(ip)+1);
+		strcpy(*pp, ip);
 		return 0;
 	}
 	return -1;
@@ -51,10 +58,29 @@ int seed_net_hostipx(char** pp) {
 				sprintf(ipxp+i*2, "%x", t[i]);
 			}
 		}
-		*pp = strdup(ipx);
+		*pp = malloc(strlen(ipx)+1);
+		strcpy(*pp, ipx);
 		free(ipd);
 		return 0;
 	} else {
 		return -1;
 	}
 }
+
+#ifdef TEST_SEED_NET
+void test_seed_net_hostip() {
+	char* s;
+	seed_net_hostip(&s);
+	printf("%s\n", s);
+}
+void test_seed_net_hostipx() {
+	char* s;
+	seed_net_hostipx(&s);
+	printf("%s\n", s);
+}
+int main() {
+	test_seed_net_hostip();
+	test_seed_net_hostipx();
+	return 0;
+}
+#endif

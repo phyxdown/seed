@@ -1,4 +1,8 @@
 /* thread lib 3 */
+#include <unistd.h>
+	/* sleep
+	 * */
+
 #include <pthread.h>
 #define Thread        pthread_t
 #define thread_create pthread_create

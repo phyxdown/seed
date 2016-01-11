@@ -20,23 +20,18 @@
 #include "concurrent.h"
 #define Interface seed_concurrent_queue
 
-/* internal 9*/
+/* internal 6*/
 #define Queue  _seed_concurrent_queue
 #define Node   _seed_concurrent_queue_node
-#define Status _seed_concurrent_queue_status
 
-#define OK          _seed_concurrent_queue_status_ok
-#define FULL        _seed_concurrent_queue_status_full
-#define ERR_INVALID _seed_concurrent_queue_status_err_invalid
-#define ERR_LOCK    _seed_concurrent_queue_status_err_lock
-#define ERR_UNLOCK  _seed_concurrent_queue_status_err_unlock
+#define ERR_LOCK    -1
+#define ERR_UNLOCK  -2
 
 #define itos(P) \
 	((Queue*)(((char*)(P)) - sizeof(Queue)))
 
 typedef struct Queue  Queue;
 typedef struct Node   Node;
-typedef enum   Status Status;
 
 struct Queue {
 	Node *tail; 
@@ -50,11 +45,6 @@ struct Node {
 	Node *next; 
 	Node *prev; 
 	void *value;
-};
-
-enum Status {
-	ERR_LOCK = -1, 
-	ERR_UNLOCK = -2, 
 };
 
 static int enqueue(Interface *queue, void *value) {
@@ -174,9 +164,6 @@ seed_concurrent_queue_create(size_t limit) {
 #undef Queue
 #undef Node
 #undef Status
-#undef OK
-#undef FULL
-#undef ERR_INVALID
 #undef ERR_LOCK
 #undef ERR_UNLOCK
 #undef itos

@@ -152,7 +152,7 @@ int32_t seed_time_hourage(seed_time* t) {
 	return t->sec/secondsPerHour;
 }
 
-#ifdef SEED_TIME_TEST
+#ifdef TEST_SEED_TIME
 static void test_seed_time_now() {
   	int32_t h;
   	seed_time* t = seed_time_now(8);
@@ -174,5 +174,6 @@ static void test_seed_time_hourage() {
 int main() {
 	test_seed_time_now();
 	test_seed_time_hourage();
+	return 0;
 }
 #endif

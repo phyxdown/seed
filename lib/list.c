@@ -137,7 +137,7 @@ queue* queueCreate() {
 }
 
 void queueRelease(stack* stack) {
-	return listRelease(stack);
+	listRelease(stack);
 }
 
 queue* queueEnqueue(stack* stack, void* value) {
