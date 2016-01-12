@@ -6,9 +6,11 @@
 
 #ifndef __USE_MISC
 #define __USE_MISC
-#endif
 #include <net/if.h>
 #undef __USE_MISC
+#else 
+#include <net/if.h>
+#endif
 
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
