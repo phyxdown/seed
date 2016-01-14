@@ -2,6 +2,10 @@
 	/* strcut timeval
 	 * struct timespec
 	 * */
+#include <stdlib.h>
+	/* malloc
+	 * free
+	 * */
 
 /* thread lib 11 */
 #include <pthread.h>
@@ -86,9 +90,8 @@ static void collect_and_handle(Aggregator* a) {
 	FHandler* h = a->handler;
 
 	void *b[BUFFER_SIZE];
-	int r = q->batchDequeue(q, b, BUFFER_SIZE);
-	if (r < 0); if (r == 0);
-	int i;
+	size_t r = q->batchDequeue(q, b, BUFFER_SIZE);
+	size_t i;
 	for (i = 0; i < r; i++) {
 		if (h(b[i]) < 0) m->add(m, b[i]);
 	}

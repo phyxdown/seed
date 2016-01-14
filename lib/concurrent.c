@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 /* 3rd party 5*/
 #include <pthread.h>
 #define Mutex pthread_mutex_t
@@ -7,6 +5,10 @@
 #define mutex_release free
 #define mutex_lock    pthread_mutex_lock
 #define mutex_unlock  pthread_mutex_unlock
+	/**
+	 * Programming logic in this file MUST ensure that pthread_mutex_lock
+	 * & pthread_mutex_unlock doesn't return errors.
+	 * */
 
 /* seed 5*/
 #include "fmpool.h"
@@ -20,13 +22,9 @@
 #include "concurrent.h"
 #define Interface seed_concurrent_queue
 
-/* internal 6*/
+/* internal 3*/
 #define Queue  _seed_concurrent_queue
 #define Node   _seed_concurrent_queue_node
-
-#define ERR_LOCK    -1
-#define ERR_UNLOCK  -2
-
 #define itos(P) \
 	((Queue*)(((char*)(P)) - sizeof(Queue)))
 
@@ -47,12 +45,12 @@ struct Node {
 	void *value;
 };
 
-static int enqueue(Interface *queue, void *value) {
+static size_t enqueue(Interface *queue, void *value) {
 	Queue* q = itos(queue);
 	Node* nd; nd = (Node*)pool_alloc(q->pool);
 	if (nd == NULL) return 0;
 	nd->value = value;
-	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
+	mutex_lock(q->mutex);
 	if (q->head == NULL) {
 		q->tail = q->head = nd;
 		nd->prev = nd->next = NULL;
@@ -62,13 +60,13 @@ static int enqueue(Interface *queue, void *value) {
 		nd->next->prev = nd;
 		q->head = nd;
 	}
-	if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
+	mutex_unlock(q->mutex);
 	return 1;
 }
 
-static int dequeue(Interface *queue, void **value) {
+static size_t dequeue(Interface *queue, void **value) {
 	Queue* q = itos(queue);
-	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
+	mutex_lock(q->mutex);
 	if (q->tail != NULL) {
 		*value = q->tail->value;
 		if (q->tail->prev == NULL) {
@@ -79,18 +77,18 @@ static int dequeue(Interface *queue, void **value) {
 			pool_free(q->tail->next);
 			q->tail->next = NULL;
 		}
-		if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
+		mutex_unlock(q->mutex);
 		return 1;
 	}
-	if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
+	mutex_unlock(q->mutex);
 	return 0;
 }
 
-static int batchDequeue(Interface *queue, void **value, size_t length) {
+static size_t batchDequeue(Interface *queue, void **value, size_t length) {
 	Queue* q = itos(queue);
-	if (0 != mutex_lock(q->mutex)) return ERR_LOCK;
+	mutex_lock(q->mutex);
 	if (q->tail != NULL) {
-		int i;
+		size_t i;
 		for (i = 0; i < length; i++) {
 			*(value + i) = q->tail->value;
 			if (q->tail->prev == NULL) {
@@ -104,10 +102,10 @@ static int batchDequeue(Interface *queue, void **value, size_t length) {
 				q->tail->next = NULL;
 			}
 		}
-		if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
+		mutex_unlock(q->mutex);
 		return i;
 	}
-	if (0 != mutex_unlock(q->mutex)) return ERR_UNLOCK;
+	mutex_unlock(q->mutex);
 	return 0;
 }
 
@@ -160,10 +158,7 @@ seed_concurrent_queue_create(size_t limit) {
 /* header 1*/
 #undef Interface
 
-/* internal 9*/
+/* internal 3*/
 #undef Queue
 #undef Node
-#undef Status
-#undef ERR_LOCK
-#undef ERR_UNLOCK
 #undef itos

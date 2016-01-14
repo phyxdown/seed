@@ -6,8 +6,6 @@
 #define CAS(ptr, old, new) \
 	 (__sync_bool_compare_and_swap((ptr), (old), (new)))
 
-static void checkMemory() {}
-
 fmpool* 
 fmpoolCreate(size_t cap, size_t size) {
 	fmpool* p;
