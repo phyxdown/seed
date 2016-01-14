@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <sys/time.h>
 #include "time.h"
 
-#ifdef __GNUC__
-#include <sys/time.h>
 seed_time* seed_time_now(int tz) {
 	seed_time* t;
 	if ((t = malloc(sizeof(*t))) == NULL) return NULL;
@@ -15,7 +13,6 @@ seed_time* seed_time_now(int tz) {
 	t->offset = -tz * 60;
 	return t;
 }
-#endif
 
 void seed_time_release(seed_time* t) {
 	if (t != NULL) free(t);

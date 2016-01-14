@@ -1,19 +1,13 @@
+#include "macros.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <sys/socket.h>
-
-#ifndef __USE_MISC
-#define __USE_MISC
 #include <net/if.h>
-#undef __USE_MISC
-#else 
-#include <net/if.h>
-#endif
-
 #include <arpa/inet.h>
 #include <sys/ioctl.h>
+
 
 int seed_net_hostip(char** pp) {
 	int sockfd;
