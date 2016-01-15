@@ -20,7 +20,7 @@
 
 /* header 1*/
 #include "concurrent.h"
-#define Interface seed_concurrent_queue
+#define IQueue seed_concurrent_queue
 
 /* internal 3*/
 #define Queue  _seed_concurrent_queue
@@ -45,7 +45,7 @@ struct Node {
 	void *value;
 };
 
-static size_t enqueue(Interface *queue, void *value) {
+static size_t enqueue(IQueue *queue, void *value) {
 	Queue* q = itos(queue);
 	Node* nd; nd = (Node*)pool_alloc(q->pool);
 	if (nd == NULL) return 0;
@@ -64,7 +64,7 @@ static size_t enqueue(Interface *queue, void *value) {
 	return 1;
 }
 
-static size_t dequeue(Interface *queue, void **value) {
+static size_t dequeue(IQueue *queue, void **value) {
 	Queue* q = itos(queue);
 	mutex_lock(q->mutex);
 	if (q->tail != NULL) {
@@ -84,7 +84,7 @@ static size_t dequeue(Interface *queue, void **value) {
 	return 0;
 }
 
-static size_t batchDequeue(Interface *queue, void **value, size_t length) {
+static size_t batchDequeue(IQueue *queue, void **value, size_t length) {
 	Queue* q = itos(queue);
 	mutex_lock(q->mutex);
 	if (q->tail != NULL) {
@@ -109,17 +109,17 @@ static size_t batchDequeue(Interface *queue, void **value, size_t length) {
 	return 0;
 }
 
-static void release(Interface *queue) {
+static void release(IQueue *queue) {
 	Queue* q = itos(queue);
 	mutex_release(q->mutex);
 	pool_release(q->pool);
 	free(q);
 }
 
-Interface*
+IQueue*
 seed_concurrent_queue_create(size_t limit) {
 	Queue* q;
-	if ((q = malloc(sizeof(Queue)+sizeof(Interface))) == NULL) {
+	if ((q = malloc(sizeof(Queue)+sizeof(IQueue))) == NULL) {
 		return NULL;
 	}
 	if ((q->mutex = (Mutex*)malloc(sizeof(Mutex))) == NULL) {
@@ -134,7 +134,7 @@ seed_concurrent_queue_create(size_t limit) {
 	mutex_init(q->mutex, NULL);
 	q->tail = q->head = NULL;
 
-	Interface* m = (Interface*)q->methods;
+	IQueue* m = (IQueue*)q->methods;
 	m->enqueue      = &enqueue;
 	m->dequeue      = &dequeue;
 	m->batchDequeue = &batchDequeue;
@@ -156,7 +156,7 @@ seed_concurrent_queue_create(size_t limit) {
 #undef pool_free
 
 /* header 1*/
-#undef Interface
+#undef IQueue
 
 /* internal 3*/
 #undef Queue
