@@ -134,12 +134,12 @@ seed_concurrent_queue_create(size_t limit) {
 	mutex_init(q->mutex, NULL);
 	q->tail = q->head = NULL;
 
-	IQueue* m = (IQueue*)q->methods;
-	m->enqueue      = &enqueue;
-	m->dequeue      = &dequeue;
-	m->batchDequeue = &batchDequeue;
-	m->release      = &release;
-	return m;
+	IQueue* queue = (IQueue*)q->methods;
+	queue->enqueue      = &enqueue;
+	queue->dequeue      = &dequeue;
+	queue->batchDequeue = &batchDequeue;
+	queue->release      = &release;
+	return queue;
 }
 /* 3rd party 5*/
 #undef Mutex

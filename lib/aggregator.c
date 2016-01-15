@@ -131,9 +131,9 @@ IAggregator* IAggregatorCreate(FHandler handler) {
 		return NULL;
 	}
 
-	IAggregator* m = (IAggregator*)a->methods;
-	m->add     = &add;
-	m->release = &release;
+	IAggregator* aggregator = (IAggregator*)a->methods;
+	aggregator->add     = &add;
+	aggregator->release = &release;
 
 	if ((thread_create(&a->thread, NULL, &collector, a)) < 0) {
 		a->queue->release(a->queue);
@@ -142,7 +142,7 @@ IAggregator* IAggregatorCreate(FHandler handler) {
 	}
 	a->isEmpty = 1;
 	a->status = WORKING;
-	return m;
+	return aggregator;
 }
 
 /* thread lib 11 */
