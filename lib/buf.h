@@ -24,7 +24,7 @@ buf* bufNew(const char *init);
 void bufRelease(Buf buf);
 buf* bufCat(Buf buffer, const char *add);
 buf* bufCatf(Buf buffer, const char *fmt, ...)
-         __Attribute__((format(printf, 2, 3)));
+         __seed_attribute__((format(printf, 2, 3)));
 buf* bufVcatf(Buf buffer, const char *fmt, va_list ap);
 
 #endif
