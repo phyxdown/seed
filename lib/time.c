@@ -31,19 +31,20 @@ typedef struct ymd {
 static const int secondsPerMinute = 60,
 	     secondsPerHour = 3600, 
 	     secondsPerDay = 86400, 
-	     secondsPerWeek = 604800, 
+//	     secondsPerWeek = 604800, 
 	     daysPer400Years = 365*400 + 97, 
 	     daysPer100Years = 365*100 + 24, 
 	     daysPer4Years = 365*4 + 1;
 
 static const int64_t absoluteZeroYear = 1;
-static const int internalYear = 1;
-static const int unixYear = 1970;
+//static const int internalYear = 1;
+//static const int unixYear = 1970;
 
-static const int64_t absoluteToInternal = 0,
-	     internalToAbsolute = 0, 
-	     unixToInternal = 62135596800, 
-	     internalToUnix = -62135596800;
+static const int64_t unixToInternal = 62135596800, 
+
+//static const int64_t absoluteToInternal = 0,
+//	     internalToAbsolute = 0, 
+//	     internalToUnix = -62135596800;
 
 static int32_t daysBefore[] = {
 	0,
