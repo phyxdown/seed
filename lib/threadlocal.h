@@ -2,9 +2,9 @@
 #define __SEED_THREADLOCAL_H
 
 #ifdef __GNUC__
-#define seed_tls __thread
+#define __seed_tls __thread
 #else
-#define seed_tls
+#define __seed_tls
 #endif
 
 #endif
