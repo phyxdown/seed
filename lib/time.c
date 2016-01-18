@@ -40,7 +40,7 @@ static const int64_t absoluteZeroYear = 1;
 //static const int internalYear = 1;
 //static const int unixYear = 1970;
 
-static const int64_t unixToInternal = 62135596800, 
+static const int64_t unixToInternal = 62135596800;
 
 //static const int64_t absoluteToInternal = 0,
 //	     internalToAbsolute = 0, 
