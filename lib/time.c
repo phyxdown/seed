@@ -3,14 +3,18 @@
 #include <sys/time.h>
 #include "time.h"
 
-seed_time* seed_time_now(int tz) {
-	seed_time* t;
-	if ((t = malloc(sizeof(*t))) == NULL) return NULL;
+static void time_now_init(seed_time* t, int16_t offset) {
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
 	t->sec = tv.tv_sec;
 	t->nsec = tv.tv_usec * 1000;
-	t->offset = -tz * 60;
+	t->offset = offset;
+}
+
+seed_time* seed_time_now(int tz) {
+	seed_time* t;
+	if ((t = malloc(sizeof(*t))) == NULL) return NULL;
+	time_now_init(t, -tz * 60);
 	return t;
 }
 
@@ -148,6 +152,16 @@ char* seed_time_format(seed_time* t) {
 
 int32_t seed_time_hourage(seed_time* t) {
 	return t->sec/secondsPerHour;
+}
+
+int seed_time_try_update_by_minimal_interval(seed_time* t, int64_t minimal_interval) {
+	seed_time n;
+	time_now_init(&n, t->offset);
+	int64_t interval = seed_time_since(&n, t);
+	if (interval >= minimal_interval) {
+		*t = n;
+		return 1;
+	} else return 0;
 }
 
 #ifdef TEST_SEED_TIME

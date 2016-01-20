@@ -52,4 +52,5 @@ char* seed_time_format(seed_time* t);
  * 	dosomething(h);
  * */
 int32_t seed_time_hourage(seed_time* t);
+int seed_time_try_update_by_minimal_interval(seed_time* time, int64_t minimal_interval);
 #endif
