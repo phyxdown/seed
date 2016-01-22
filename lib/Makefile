@@ -5,6 +5,7 @@ INSTALL_INCLUDE=$(PREFIX)/include/seed
 
 CC=gcc
 INSTALL=install
+UNINSTALL=rm -rf
 
 OPTIMIZATION?=-O2
 
@@ -18,20 +19,28 @@ LIBS=-lpthread
 SEED_CC=$(CC) $(CFLAGS)
 SEED_INSTALL=$(INSTALL)
 
-SEED_LIB_NAME=libseed.so
+SEED_LIB=libseed.so
 
-all: $(SEED_LIB_NAME)
-	@echo "Oh, GOOD CODER,"
-	@echo "your presence here somehow soothes."
-	@echo ""
+all: $(SEED_LIB)
 
 .PHONY: all
 
-$(SEED_LIB_NAME): *.c
+$(SEED_LIB): *.c
 	$(SEED_CC) -shared -fPIC -DPIC -o $@ $^
+
+clean:
+	rm -rf $(SEED_LIB)
+
+.PHONY: clean
 
 install: all
 	@mkdir -p $(INSTALL_LIB)
-	$(SEED_INSTALL) $(SEED_LIB_NAME) $(INSTALL_LIB)
+	$(SEED_INSTALL) $(SEED_LIB) $(INSTALL_LIB)
 	@mkdir -p $(INSTALL_INCLUDE)
 	$(SEED_INSTALL) *.h $(INSTALL_INCLUDE)
+
+uninstall:
+	$(UNINSTALL) $(INSTALL_LIB)/$(SEED_LIB)
+	$(UNINSTALL) $(INSTALL_INCLUDE)
+
+.PHONY: uninstall
