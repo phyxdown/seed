@@ -52,7 +52,7 @@ static const int64_t unixToInternal = 62135596800;
 
 static int32_t daysBefore[] = {
 	0,
-	32,
+	31,
 	31 + 28,
 	31 + 28 + 31,
 	31 + 28 + 31 + 30,
