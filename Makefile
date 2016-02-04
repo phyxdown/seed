@@ -1,4 +1,4 @@
 default: all
 
 .DEFAULT:
-	cd lib && $(MAKE) $@
+	cd src && $(MAKE) $@
