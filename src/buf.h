@@ -1,8 +1,6 @@
 #ifndef __SEED_BUF_H
 #define __SEED_BUF_H
 
-//#define SEED_BUF_MAX_PREALLOC (1<<20)
-
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -15,7 +13,7 @@ typedef struct seed_buf {
 } seed_buf;
 
 seed_buf* seed_buf_create();
-seed_buf* seed_buf_create_with(const char *init);
+seed_buf* seed_buf_create_with_string(const char *init);
 
 void seed_buf_release(seed_buf* buf);
 

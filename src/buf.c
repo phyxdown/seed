@@ -4,81 +4,85 @@
 
 #include "buf.h"
 
-buf* bufNew(const char *init) {
-	buf* buffer;
+#define SEED_BUF_MAX_PREALLOC (1<<20)
+
+seed_buf* seed_buf_create() {
+	return seed_buf_create_with_string("");
+}
+
+seed_buf* seed_buf_create_with_string(const char *init) {
+	seed_buf* buf;
 	size_t initlen = strlen(init);
-	buffer = malloc(sizeof(struct buf) + initlen + 1);
-	if (buffer == NULL) return NULL;
-	buffer->len = 0;
-	buffer->free = initlen;
-	buffer->data[buffer->len] = '\0';
-	buffer = bufCat(buffer, init);
-	return buffer;
+	if (NULL == (buf = malloc(sizeof(struct seed_buf) + initlen + 1)))
+		return NULL;
+	buf->len = 0;
+	buf->free = initlen;
+	buf->data[buf->len] = '\0';
+	buf = seed_buf_cat(buf, init);
+	return buf;
 }
 
-void bufRelease(buf *buffer) {
-	if (buffer == NULL) return;
-	free(buffer);
+void seed_buf_release(seed_buf* buf) {
+	if (NULL != buf) free(buf);
 }
 
-buf* bufCat(buf *bufin, const char *add) {
-	buf *buffer = bufin;
+seed_buf* seed_buf_cat(seed_buf* bufin, const char *add) {
+	seed_buf *buf = bufin;
 	size_t addlen = strlen(add);
-	if (addlen == 0) return buffer;
-	if (addlen > buffer->free) {
-		size_t newlen = buffer->len + addlen;
-		if (newlen < BUF_MAX_PREALLOC) newlen *= 2;
-		else newlen += BUF_MAX_PREALLOC;
-		buf* nbuffer = realloc(buffer, sizeof(struct buf)+ newlen + 1);
-		if (nbuffer == NULL) { 
-			free(buffer);
-			return NULL;
-		}
-		else buffer = nbuffer;
-		buffer->free = newlen - buffer->len;
+	if (addlen == 0) return buf;
+	if (addlen > buf->free) {
+		size_t newlen = buf->len + addlen;
+		if (newlen < SEED_BUF_MAX_PREALLOC) newlen *= 2;
+		else newlen += SEED_BUF_MAX_PREALLOC;
+		seed_buf* nbuf = realloc(buf, sizeof(struct seed_buf)+ newlen + 1);
+		if (nbuf == NULL) return buf;
+		else buf = nbuf;
+		buf->free = newlen - buf->len;
 	}
-	strcpy(&buffer->data[buffer->len], add);
-	buffer->len += addlen;
-	buffer->free -= addlen;
-	buffer->data[buffer->len] = '\0';
-	return buffer;
+	strcpy(&buf->data[buf->len], add);
+	buf->len += addlen;
+	buf->free -= addlen;
+	buf->data[buf->len] = '\0';
+	return buf;
 }
 
-buf* bufVcatf(buf *bufin, const char *fmt, va_list ap) {
-	buf *buffer = bufin;
+seed_buf* seed_buf_vcatf(seed_buf* bufin, const char *fmt, va_list ap) {
+	seed_buf* buf = bufin;
 	va_list cpy;
-	char staticbuf[1024], *buf = staticbuf;
+	char staticbuf[1024], *buffer = staticbuf;
 	size_t buflen = strlen(fmt)*2;
 	if (buflen > sizeof(staticbuf)) {
-		buf = malloc(buflen);
-		if (buf == NULL) return NULL;
+		buffer = malloc(buflen);
+		if (buffer == NULL) return buf;
 	} else {
 		buflen = sizeof(staticbuf);
 	}
 	while(1) {
-		buf[buflen-2] = '\0';
+		buffer[buflen-2] = '\0';
 		va_copy(cpy, ap);
-		vsnprintf(buf, buflen, fmt, cpy);
+		vsnprintf(buffer, buflen, fmt, cpy);
 		va_end(cpy);
-		if (buf[buflen-2] != '\0') {
-			if (buf != staticbuf) free(buf);
+		if (buffer[buflen-2] != '\0') {
+			if (buffer != staticbuf) free(buffer);
 			buflen *= 2;
-			buf = malloc(buflen);
-			if (buf == NULL) return NULL;
+			buffer = malloc(buflen);
+			if (buffer == NULL) return buf;
 			continue;
 		}
 		break;
 	}
-	buffer = bufCat(buffer, buf);
-	if (buf != staticbuf) free(buf);
-	return buffer;
+	buf = seed_buf_cat(buf, buffer);
+	if (buffer != staticbuf) free(buffer);
+	return buf;
 }
 
-buf* bufCatf(buf* bufin, const char *fmt, ...) {
-	buf *buffer = bufin;
+seed_buf* seed_buf_catf(seed_buf* bufin, const char *fmt, ...) {
+	seed_buf* buf = bufin;
 	va_list ap;
 	va_start(ap, fmt);
-		buffer = bufVcatf(buffer, fmt, ap);
+		buf = seed_buf_vcatf(buf, fmt, ap);
 	va_end(ap);
-	return buffer;
+	return buf;
 }
+
+#undef SEED_BUF_MAX_PREALLOC
