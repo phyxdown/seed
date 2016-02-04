@@ -3,73 +3,57 @@
 
 #include <stdio.h>
 
-typedef struct listNode {
-	struct listNode* prev;
-	struct listNode* next;
+typedef struct seed_list_node {
+	struct seed_list_node* prev;
+	struct seed_list_node* next;
 	void* value;
-} listNode;
+} seed_list_node;
 
-typedef struct listIter {
-	listNode* next;
+typedef struct seed_list_iterator {
+	seed_list_node* next;
 	int direction;
-} listIter;
+} seed_list_iterator;
 
-typedef struct list {
-	listNode *head;
-	listNode *tail;
+typedef struct seed_list {
+	seed_list_node* head;
+	seed_list_node* tail;
 	size_t len;
 	void* (*dup) (void *ptr);
 	void (*free) (void *ptr);
 	int (*match) (void *ptr, void *key);
-} list;
+} seed_list;
 
-typedef struct list* List;
+seed_list* seed_list_create();
+void       seed_list_release(seed_list* list);
 
-list* listCreate();
-void  listRelease(list* list);
-list* listAddNodeHead(list* list, void* value);
-list* listAddNodeTail(list* list, void* value);
+seed_list* seed_list_add_node_head(seed_list* list, void* value);
+seed_list* seed_list_add_node_tail(seed_list* list, void* value);
 
-listIter* listGetIterator(list* list, int direction);
-listNode* listNext(listIter* iter);
-void listReleaseIterator(listIter* iter);
+seed_list_iterator* seed_list_get_iterator(seed_list* list, int direction);
+seed_list_node* seed_list_next(seed_list_iterator* iter);
+void                seed_list_release_iterator(seed_list_iterator* iter);
 
-#define LIST_START_HEAD 0
-#define LIST_START_TAIL 1
+#define SEED_LIST_START_HEAD 0
+#define SEED_LIST_START_TAIL 1
 
-#endif
+typedef seed_list_node seed_stack_node;
+typedef seed_list seed_stack;
 
-#ifndef __SEED_STACK_H
-#define __SEED_STACK_H
+seed_stack* seed_stack_create();
+void seed_stack_release(seed_stack* stack);
 
-typedef listNode stackNode;
+void* seed_stack_pop(seed_stack* stack);
+void* seed_stack_peek(seed_stack* stack);
+seed_stack* seed_stack_push(seed_stack* stack, void* value);
 
-typedef list stack;
 
-typedef stack* Stack;
 
-stack* stackCreate();
-void stackRelease(stack* stack);
+typedef seed_list_node seed_queue_node;
+typedef seed_list seed_queue;
 
-void* stackPop(stack* stack);
-void* stackPeek(stack* stack);
-stack* stackPush(stack* stack, void* value);
+seed_queue* seed_queue_create();
+void seed_queue_release(seed_queue* queue);
 
-#endif
-
-#ifndef __SEED_QUEUE_H
-#define __SEED_QUEUE_H
-
-typedef listNode queueNode;
-
-typedef list queue;
-
-typedef queue* Queue;
-
-queue* queueCreate();
-void queueRelease(stack* stack);
-
-queue* queueEnqueue(stack* stack, void* value);
-void* queueDnqueue(stack* stack);
-
+seed_queue* seed_queue_enqueue(seed_queue* queue, void* value);
+void* seed_queue_dnqueue(seed_queue* queue);
 #endif

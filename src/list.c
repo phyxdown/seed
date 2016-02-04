@@ -4,8 +4,8 @@
 
 #include "list.h"
 
-list* listCreate() {
-	list* list;
+seed_list* seed_list_create() {
+	seed_list* list;
 	if ((list = malloc(sizeof(*list))) == NULL) 
 		return NULL;
 	list->head = list->tail = NULL;
@@ -16,11 +16,11 @@ list* listCreate() {
 	return list;
 }
 
-void listRelease(list* list) {
+void seed_list_release(seed_list* list) {
 	if (list == NULL) return;
 	size_t len;
-	listNode* current;
-	listNode* next;
+	seed_list_node* current;
+	seed_list_node* next;
 
 	current = list->head;
 	len = list->len;
@@ -33,8 +33,8 @@ void listRelease(list* list) {
 	free(list);
 }
 
-list* listAddNodeHead(list* list, void* value) {
-	listNode* node;
+seed_list* seed_list_add_node_head(seed_list* list, void* value) {
+	seed_list_node* node;
 	if((node = malloc(sizeof(*node))) == NULL)
 		return NULL;
 	node->value = value;
@@ -51,8 +51,8 @@ list* listAddNodeHead(list* list, void* value) {
 	return list;
 }
 
-list* listAddNodeTail(list* list, void* value) {
-	listNode* node;
+seed_list* seed_list_add_node_tail(seed_list* list, void* value) {
+	seed_list_node* node;
 	if((node = malloc(sizeof(*node))) == NULL)
 		return NULL;
 	node->value = value;
@@ -69,21 +69,20 @@ list* listAddNodeTail(list* list, void* value) {
 	return list;
 }
 
-listIter* listGetIterator(list* list, int direction) {
-	listIter* iter;
+seed_list_iterator* seed_list_get_iterator(seed_list* list, int direction) {
+	seed_list_iterator* iter;
 	if ((iter = malloc(sizeof(*iter))) == NULL) return NULL;
-	if (direction == LIST_START_HEAD) iter->next = list->head;
+	if (direction == SEED_LIST_START_HEAD) iter->next = list->head;
 	else iter->next = list->tail;
 	iter->direction = direction;
 	return iter;
 }
 
 
-listNode* listNext(listIter* iter) {
-	listNode* current = iter->next;
-
+seed_list_node* seed_list_next(seed_list_iterator* iter) {
+	seed_list_node* current = iter->next;
 	if (current != NULL) {
-		if (iter->direction == LIST_START_HEAD)
+		if (iter->direction == SEED_LIST_START_HEAD)
 			iter->next = current->next;
 		else 
 			iter->next = current->prev;
@@ -91,20 +90,19 @@ listNode* listNext(listIter* iter) {
 	return current;
 }
 
-void listReleaseIterator(listIter* iter) {
-	if (iter == NULL) return;
-	free(iter);
+void seed_list_release_iterator(seed_list_iterator* iter) {
+	if (NULL != iter) free(iter);
 }
 
-stack* stackCreate() {
-	return listCreate();
+seed_stack* seed_stack_create() {
+	return seed_list_create();
 }
 
-void stackRelease(stack* stack) {
-	listRelease(stack);
+void seed_stack_release(seed_stack* stack) {
+	seed_list_release(stack);
 }
 
-void* stackPop(stack* stack) {
+void* seed_stack_pop(seed_stack* stack) {
 	void* value;
 	if (stack->head == NULL) value = NULL;
 	else {
@@ -122,28 +120,28 @@ void* stackPop(stack* stack) {
 	return value;
 }
 
-void* stackPeek(stack* stack) {
-	stackNode* current;
+void* seed_stack_peek(seed_stack* stack) {
+	seed_stack_node* current;
 	if ((current = stack->head) == NULL) return NULL;
 	return current->value;
 }
 
-stack* stackPush(stack* stack, void* value) {
-	return listAddNodeHead(stack, value);
+seed_stack* seed_stack_push(seed_stack* stack, void* value) {
+	return seed_list_add_node_head(stack, value);
 }
 
-queue* queueCreate() {
-	return listCreate();
+seed_queue* seed_queue_create() {
+	return seed_list_create();
 }
 
-void queueRelease(stack* stack) {
-	listRelease(stack);
+void seed_queue_release(seed_queue* queue) {
+	seed_list_release(queue);
 }
 
-queue* queueEnqueue(stack* stack, void* value) {
-	return listAddNodeTail(stack, value);
+seed_queue* seed_queue_enqueue(seed_queue* queue, void* value) {
+	return seed_list_add_node_tail(queue, value);
 }
 
-void* queueDnqueue(stack* stack) {
-	return stackPop(stack);
+void* seed_queue_dnqueue(seed_queue* queue) {
+	return seed_stack_pop(queue);
 }
