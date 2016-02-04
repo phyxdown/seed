@@ -12,11 +12,11 @@
 
 /* seed 5*/
 #include "fmpool.h"
-#define Pool fmpool
-#define pool_create  fmpoolCreate
-#define pool_release free
-#define pool_alloc   fmpoolAlloc
-#define pool_free    fmpoolFree
+#define Pool seed_fmpool
+#define pool_create  seed_fmpool_create
+#define pool_release seed_fmpool_release
+#define pool_alloc   seed_fmpool_alloc
+#define pool_free    seed_fmpool_free
 
 /* header 1*/
 #include "concurrent.h"
