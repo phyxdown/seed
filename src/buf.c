@@ -22,6 +22,10 @@ seed_buf* seed_buf_create_with_string(const char *init) {
 	return buf;
 }
 
+const char* seed_buf_data(seed_buf* buf) {
+	return buf->data;
+}
+
 void seed_buf_release(seed_buf* buf) {
 	if (NULL != buf) free(buf);
 }

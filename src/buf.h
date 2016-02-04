@@ -12,8 +12,13 @@ typedef struct seed_buf {
 	char data[];
 } seed_buf;
 
+//To ensure that all seed_buf functions does not panic, 
+//the using program MUST check if it is a NULL-seed_buf created, 
+//and make sure that NEVER a NULL-seed_buf is used.
 seed_buf* seed_buf_create();
 seed_buf* seed_buf_create_with_string(const char *init);
+
+const char* seed_buf_data(seed_buf* buf);
 
 void seed_buf_release(seed_buf* buf);
 
