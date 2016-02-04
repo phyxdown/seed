@@ -95,7 +95,7 @@ void seed_list_release_iterator(seed_list_iterator* iter) {
 }
 
 seed_stack* seed_stack_create() {
-	return seed_list_create();
+	return (seed_stack*)seed_list_create();
 }
 
 void seed_stack_release(seed_stack* stack) {
@@ -127,21 +127,21 @@ void* seed_stack_peek(seed_stack* stack) {
 }
 
 seed_stack* seed_stack_push(seed_stack* stack, void* value) {
-	return seed_list_add_node_head(stack, value);
+	return (seed_stack*)seed_list_add_node_head(stack, value);
 }
 
 seed_queue* seed_queue_create() {
-	return seed_list_create();
+	return (seed_queue*)seed_list_create();
 }
 
 void seed_queue_release(seed_queue* queue) {
-	seed_list_release(queue);
+	seed_list_release((seed_list*)queue);
 }
 
 seed_queue* seed_queue_enqueue(seed_queue* queue, void* value) {
-	return seed_list_add_node_tail(queue, value);
+	return seed_list_add_node_tail((seed_list*)queue, value);
 }
 
 void* seed_queue_dnqueue(seed_queue* queue) {
-	return seed_stack_pop(queue);
+	return seed_stack_pop((seed_stack*)queue);
 }
