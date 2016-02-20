@@ -90,3 +90,94 @@ seed_buf* seed_buf_catf(seed_buf* bufin, const char *fmt, ...) {
 }
 
 #undef SEED_BUF_MAX_PREALLOC
+
+#ifdef TEST_SEED_BUF
+
+#define $TEST(V) static void test_##V () { char* _test_result; char* _test_name = "" #V "";
+#define $START
+#define $END goto success;success:printf("pass: %s\n", _test_name);return;fail:printf("fail: %s\n\t%s\n", _test_name, _test_result);return;}
+#define $ERROR(M) \
+	do{ \
+		_test_result = M; \
+		goto fail; \
+	}while(0); \
+
+$TEST(BUF_CREATE)
+$START
+	seed_buf* buf;
+	buf = seed_buf_create();
+	free(buf);
+	buf = NULL;
+	buf = seed_buf_create_with_string("hello world.");
+	if(0 != strcmp("hello world.", buf->data)) {
+		$ERROR("value of created seed_buf is out of expectation.")
+	}
+	free(buf);
+	buf = NULL;
+$END
+
+$TEST(BUF_RELEASE)
+$START
+	seed_buf* buf;
+	buf = seed_buf_create_with_string("hello seed buf.");
+	seed_buf_release(buf);
+$END
+
+$TEST(BUF_CAT)
+$START
+	seed_buf* buf;
+	buf = seed_buf_create_with_string("hello");
+	if (!!buf) {
+		buf = seed_buf_cat(buf, " world.");
+		if (0 != strcmp("hello world.", buf->data))
+			$ERROR("value of catenated buf is out of expectation, it should be \"hello world.\".")
+		buf = seed_buf_cat(buf, "1234567890");
+		if (0 != strcmp("hello world.1234567890", buf->data))
+			$ERROR("value of catenated buf is out of expectation, it should be \"hello world.1234567890\".")
+	}
+	seed_buf_release(buf);
+$END
+
+$TEST(BUF_CATF)
+$START
+	seed_buf* buf;
+	buf = seed_buf_create_with_string("hello");
+	if(!!buf) {
+		buf = seed_buf_catf(buf, "%d", 123);
+		if (0 != strcmp("hello123", buf->data))
+			$ERROR("value of catenated buf is out of expectation.\n\tIt should be \"hello123\".")
+
+		buf = seed_buf_catf(buf, " %s, %s.", "my world", "my girl");
+		if (0 != strcmp("hello123 my world, my girl.", buf->data))
+			$ERROR("value of catenated buf is out of expectation.\n\tIt should be \"hello123 my world, my girl.\".")
+	}
+	seed_buf_release(buf);
+$END
+
+$TEST(BUF_CATF_LOOP)
+$START
+	seed_buf* buf;
+	buf = seed_buf_create_with_string("hello");
+	if (!!buf) {
+		int i;
+		for (i = 0; i < 100000; i++) {
+			buf = seed_buf_catf(buf, "%d", 1);
+			buf = seed_buf_catf(buf, "%s", "a");
+			buf = seed_buf_catf(buf, "%s", "hahaha, ");
+		}
+		if (buf->len != 1000005) {
+			$ERROR("length of catenated buf is out of expectation.\n\tIt should be 1000005.")
+		}
+	}
+	seed_buf_release(buf);
+$END
+
+int main() {
+	test_BUF_CREATE();
+	test_BUF_RELEASE();
+	test_BUF_CAT();
+	test_BUF_CATF();
+	test_BUF_CATF_LOOP();
+	return 0;
+}
+#endif
