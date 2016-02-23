@@ -165,15 +165,18 @@ int seed_time_try_update_by_minimal_interval(seed_time* t, int64_t minimal_inter
 }
 
 #ifdef TEST_SEED_TIME
-static void test_seed_time_now() {
-  	int32_t h;
+#include "test.h"
+$TEST(TIME_HOURAGE)
+$START
+	int32_t h;
   	seed_time* t = seed_time_now(8);
   	if (!!t) h = seed_time_hourage(t);
   	free(t);
   	printf("%d\n", h);
-}
+$END
 
-static void test_seed_time_hourage() {
+$TEST(TIME_FORMAT)
+$START
   	seed_time* t = seed_time_now(8);
   	if (!!t) {
   		char* ts = seed_time_format(t);
@@ -181,11 +184,11 @@ static void test_seed_time_hourage() {
   		free(ts);
   	}
   	free(t);
-}
+$END
 
 int main() {
-	test_seed_time_now();
-	test_seed_time_hourage();
+	test_TIME_HOURAGE();
+	test_TIME_FORMAT();
 	return 0;
 }
 #endif
