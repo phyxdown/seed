@@ -64,19 +64,24 @@ int seed_net_hostipx(char** pp) {
 }
 
 #ifdef TEST_SEED_NET
-void test_seed_net_hostip() {
+#include "test.h"
+$TEST(NET_HOSTIP)
+$START
 	char* s;
 	seed_net_hostip(&s);
 	printf("%s\n", s);
-}
-void test_seed_net_hostipx() {
+$END
+
+$TEST(NET_HOSTIPX)
+$START
 	char* s;
 	seed_net_hostipx(&s);
 	printf("%s\n", s);
-}
+$END
+
 int main() {
-	test_seed_net_hostip();
-	test_seed_net_hostipx();
+	test_NET_HOSTIP();
+	test_NET_HOSTIPX();
 	return 0;
 }
 #endif
